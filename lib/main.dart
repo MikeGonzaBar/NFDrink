@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nfdrink/pages/login.dart';
 
 void main() => runApp(const MyApp());
 
@@ -8,15 +9,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+          textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+            foregroundColor: Colors.orange,
+          )),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Color(0xffbe3535), primary: Color(0xffbe3535))),
       title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Material App Bar'),
-        ),
-        body: const Center(
-          child: Text('Hello World'),
-        ),
-      ),
+      home: LoginPage(),
     );
   }
 }
