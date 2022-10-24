@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20),
-          // width: MediaQuery.of(context).size.width,
+          
           child: Column(
             children: [
               const Padding(

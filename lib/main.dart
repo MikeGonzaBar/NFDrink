@@ -10,12 +10,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-            foregroundColor: Colors.orange,
-          )),
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Color(0xffbe3535), primary: Color(0xffbe3535))),
+        scaffoldBackgroundColor: Color(0xff2d2d2d),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Color(0xffbe3535), primary: Color(0xffbe3535)),
+      ),
       title: 'Material App',
       home: LoginPage(),
     );
