@@ -12,14 +12,34 @@ class HomePage extends StatelessWidget {
         title: const Text('NFDrink'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(12),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: Color(0xff494949),
+          decoration: BoxDecoration(
+              color: Color(0xff494949),
+              borderRadius: BorderRadius.all(Radius.circular(12))),
           child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Text("Hello"),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(
+                  "Ready to scan your NFDrink",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Image.asset(
+                  "assets/imgs/logo_white.png",
+                  width: MediaQuery.of(context).size.width * .8,
+                ),
+              )
             ],
           ),
         ),
