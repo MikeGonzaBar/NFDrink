@@ -5,18 +5,18 @@ import 'package:nfdrink/pages/user/home_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
-  var userTextController = TextEditingController();
-  var passwordTextController = TextEditingController();
+  final userTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Log in to NFDrink'),
+        title: const Text('Log in to NFDrink'),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               Image.asset(
@@ -24,11 +24,11 @@ class LoginPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * .3,
               ),
               Padding(
-                padding: EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 8.0),
                 child: TextField(
                   controller: userTextController,
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
                     labelText: "Email",
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white)),
@@ -37,14 +37,14 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                 child: TextField(
                   controller: passwordTextController,
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
                     labelText: "Password",
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white)),
@@ -61,11 +61,11 @@ class LoginPage extends StatelessWidget {
                       ..pop()
                       ..push(
                         MaterialPageRoute(
-                          builder: (context) => HomePage(),
+                          builder: (context) => const HomePage(),
                         ),
                       );
                   },
-                  child: Text(
+                  child: const Text(
                     "LOG IN",
                   ),
                 ),
@@ -89,7 +89,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(4.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Divider(
                   thickness: 1,
                   color: const Color(0xffC5C5C5),
@@ -109,7 +109,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       );
                   },
-                  child: Text("REGISTER"),
+                  child: const Text("REGISTER"),
                 ),
               ),
             ],
