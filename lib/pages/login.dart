@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nfdrink/pages/admin/all_products_info.dart';
 import 'package:nfdrink/pages/register.dart';
 import 'package:nfdrink/pages/user/home_page.dart';
 
@@ -69,10 +70,29 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                      ..pop()
+                      ..push(
+                        MaterialPageRoute(
+                          builder: (context) => const AllProductsInfoPage(),
+                        ),
+                      );
+                  },
+                  child: const Text(
+                    "TEMP Admin Login",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.all(4.0),
                 child: Divider(
                   thickness: 1,
+                  color: const Color(0xffC5C5C5),
                   indent: (MediaQuery.of(context).size.width / 20),
                   endIndent: (MediaQuery.of(context).size.width / 20),
                 ),
