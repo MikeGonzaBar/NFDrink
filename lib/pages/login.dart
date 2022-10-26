@@ -4,38 +4,35 @@ import 'package:nfdrink/pages/register.dart';
 import 'package:nfdrink/pages/user/home_page.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+  final userTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final userTextController = TextEditingController();
-    final passwordTextController = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Log in to NFDrink'),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(25.0),
-                child: Icon(
-                  Icons.place_outlined,
-                  color: Color(0xFF009fb7),
-                  size: 120,
-                ),
+              Image.asset(
+                "assets/imgs/logo_white.png",
+                width: MediaQuery.of(context).size.width * .3,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: TextField(
                   controller: userTextController,
+                  style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: "Email",
-                    border: UnderlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    labelStyle: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -46,15 +43,18 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
+                  style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: "Password",
-                    border: UnderlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    labelStyle: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
               SizedBox(
                 width: double.infinity,
+                height: 45,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context)
@@ -67,7 +67,6 @@ class LoginPage extends StatelessWidget {
                   },
                   child: const Text(
                     "LOG IN",
-                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -106,12 +105,11 @@ class LoginPage extends StatelessWidget {
                       ..pop()
                       ..push(
                         MaterialPageRoute(
-                          builder: (context) => const RegisterPage(),
+                          builder: (context) => RegisterPage(),
                         ),
                       );
                   },
-                  child: const Text("REGISTER",
-                      style: TextStyle(color: Colors.white)),
+                  child: const Text("REGISTER"),
                 ),
               ),
             ],

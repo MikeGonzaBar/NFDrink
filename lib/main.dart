@@ -11,10 +11,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xff2d2d2d),
+        scaffoldBackgroundColor: const Color(0xff2d2d2d),
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xffbe3535),
-          primary: Color(0xffbe3535),
+          seedColor: const Color(0xffbe3535),
+          primary: const Color(0xffbe3535),
         ),
         textTheme: GoogleFonts.latoTextTheme(
           Theme.of(context).textTheme,

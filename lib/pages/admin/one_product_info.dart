@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/admin/widgets/category_widget.dart';
-import 'package:nfdrink/pages/admin/widgets/comparationTable_widget.dart';
+import 'package:nfdrink/pages/admin/widgets/comparation_table_widget.dart';
 import 'package:nfdrink/pages/admin/widgets/comparation_of_two_widget.dart';
 import 'package:nfdrink/pages/admin/widgets/week_day_comparation_widget.dart';
 
