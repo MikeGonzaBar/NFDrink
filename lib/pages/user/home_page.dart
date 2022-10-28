@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nfdrink/pages/user/scan_bad_result.dart';
+import 'package:nfdrink/pages/user/scan_good_result.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -37,7 +39,31 @@ class HomePage extends StatelessWidget {
                   "assets/imgs/logo_white.png",
                   width: MediaQuery.of(context).size.width * .8,
                 ),
-              )
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ScanBadResultPage(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Temp: go to BAD scan result page",
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ScanGoodResultPage(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Temp: go to GOOD scan result page",
+                ),
+              ),
             ],
           ),
         ),
