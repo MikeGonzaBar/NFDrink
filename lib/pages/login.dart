@@ -1,11 +1,18 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/admin/all_products_info.dart';
 import 'package:nfdrink/pages/register.dart';
 import 'package:nfdrink/pages/user/home_page.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final userTextController = TextEditingController();
@@ -36,6 +43,7 @@ class LoginPage extends StatelessWidget {
                     labelText: "Email",
                     border: UnderlineInputBorder(),
                     focusedBorder: OutlineInputBorder(),
+                    icon: Icon(Icons.mail_outline),
                   ),
                 ),
               ),
@@ -50,23 +58,40 @@ class LoginPage extends StatelessWidget {
                     labelText: "Password",
                     border: UnderlineInputBorder(),
                     focusedBorder: OutlineInputBorder(),
+                    icon: Icon(Icons.lock_outline),
                   ),
                 ),
               ),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                      ..pop()
-                      ..push(
+                  onPressed: () async {
+                    if (await _signIn(
+                        userTextController.text, passwordTextController.text)) {
+                      Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => const HomePage(),
                         ),
                       );
+                    } else {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Error signing in'),
+                          content: const Text(
+                              'There was an error signing in, please try again.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   },
                   child: const Text(
-                    "LOG IN",
+                    "Log in",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -75,13 +100,11 @@ class LoginPage extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context)
-                      ..pop()
-                      ..push(
-                        MaterialPageRoute(
-                          builder: (context) => const AllProductsInfoPage(),
-                        ),
-                      );
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const AllProductsInfoPage(),
+                      ),
+                    );
                   },
                   child: const Text(
                     "TEMP Admin Login",
@@ -102,15 +125,13 @@ class LoginPage extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context)
-                      ..pop()
-                      ..push(
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterPage(),
-                        ),
-                      );
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterPage(),
+                      ),
+                    );
                   },
-                  child: const Text("REGISTER",
+                  child: const Text("Register",
                       style: TextStyle(color: Colors.white)),
                 ),
               ),
@@ -119,5 +140,43 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<bool> _signIn(usr, pwd) async {
+    try {
+      // print(await AmplifyAuthCognito().getCurrentUser());
+      final result = await Amplify.Auth.signIn(username: usr, password: pwd);
+
+      var isSignedIn = result.isSignedIn;
+      try {
+        final result = await AmplifyAuthCognito().fetchUserAttributes();
+        for (final element in result) {
+          print('key: ${element.userAttributeKey}; value: ${element.value}');
+        }
+      } on AuthException catch (e) {
+        // print(e.message);
+        return false;
+      }
+      return isSignedIn;
+    } on AuthException catch (e) {
+      // safePrint(e.message);
+      return false;
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      final result = await AmplifyAuthCognito().fetchUserAttributes();
+      for (final element in result) {
+        print('key: ${element.userAttributeKey}; value: ${element.value}');
+      }
+    } on AuthException catch (e) {
+      print(e.message);
+    }
+    try {
+      await AmplifyAuthCognito().signOut();
+    } on AmplifyException catch (e) {
+      print(e.message);
+    }
   }
 }
