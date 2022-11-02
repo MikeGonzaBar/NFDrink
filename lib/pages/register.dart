@@ -98,7 +98,7 @@ class RegisterPage extends StatelessWidget {
                       ..pop()
                       ..push(
                         MaterialPageRoute(
-                          builder: (context) => const HomePage(),
+                          builder: (context) => HomePage(),
                         ),
                       );
                   },
