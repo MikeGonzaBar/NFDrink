@@ -1,10 +1,13 @@
+// ignore_for_file: prefer_const_constructors_in_immutables, unused_import
+
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/user/scan_bad_result.dart';
 import 'package:nfdrink/pages/user/scan_good_result.dart';
+import 'package:nfdrink/providers/nfc_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
+  HomePage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,23 +26,45 @@ class HomePage extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Text(
-                  "Ready to scan your NFDrink",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    context.watch<NfcProvider>().nfcReadStatusText,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
               Expanded(
-                child: Image.asset(
-                  "assets/imgs/logo_white.png",
-                  width: MediaQuery.of(context).size.width * .8,
+                flex: 10,
+                child: GestureDetector(
+                  onTap: () {
+                    context.read<NfcProvider>().scanNfc(context);
+                  },
+                  child: Image.asset(
+                    "assets/imgs/nfdrink_logo_circle.png",
+                    width: MediaQuery.of(context).size.width * .8,
+                  ),
                 ),
               ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.of(context).push(
+              //       MaterialPageRoute(
+              //         builder: (context) => const ScanGoodResultPage(),
+              //       ),
+              //     );
+              //   },
+              //   child: const Text(
+              //     "Temp: go to GOOD scan result page",
+              //   ),
+              // ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(
@@ -50,18 +75,6 @@ class HomePage extends StatelessWidget {
                 },
                 child: const Text(
                   "Temp: go to BAD scan result page",
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const ScanGoodResultPage(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  "Temp: go to GOOD scan result page",
                 ),
               ),
             ],

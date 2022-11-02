@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nfdrink/providers/nfc_provider.dart';
+import 'package:provider/provider.dart';
 
 class ScanGoodResultPage extends StatelessWidget {
   const ScanGoodResultPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +27,18 @@ class ScanGoodResultPage extends StatelessWidget {
                   'Información de tu NFDrink:',
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(
+                  context.watch<NfcProvider>().nfcData,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
