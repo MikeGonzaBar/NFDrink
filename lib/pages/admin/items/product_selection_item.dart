@@ -8,9 +8,8 @@ class ProductSelectionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("Click on item");
         Navigator.of(context)
-          ..push(
+          .push(
             MaterialPageRoute(
               builder: (context) => const OneProductInfo(),
             ),

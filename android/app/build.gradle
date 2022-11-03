@@ -47,7 +47,11 @@ android {
         applicationId "mx.iteso.nfdrink"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
+<<<<<<< HEAD
         minSdkVersion 21
+=======
+        minSdkVersion 19
+>>>>>>> 701830e4fe52032e72d46c5db0585c07dbe81aff
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

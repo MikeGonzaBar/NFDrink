@@ -20,7 +20,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final userTextController = TextEditingController();
     final passwordTextController = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Log in to NFDrink'),
@@ -42,18 +41,15 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(25.0),
-                child: Icon(
-                  Icons.place_outlined,
-                  color: Color(0xFF009fb7),
-                  size: 120,
-                ),
+              Image.asset(
+                "assets/imgs/logo_white.png",
+                width: MediaQuery.of(context).size.width * .3,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: TextField(
                   controller: userTextController,
+                  style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: "Email",
                     border: UnderlineInputBorder(),
@@ -69,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
+                  style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: "Password",
                     border: UnderlineInputBorder(),
@@ -79,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(
                 width: double.infinity,
+                height: 45,
                 child: ElevatedButton(
                   onPressed: () async {
                     if (await _signIn(
@@ -92,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                       } else {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => const HomePage(),
+                            builder: (context) => HomePage(),
                           ),
                         );
                       }
@@ -150,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const RegisterPage(),
+                        builder: (context) => RegisterPage(),
                       ),
                     );
                   },

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/login.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nfdrink/providers/bottles_provider.dart';
+import 'package:nfdrink/providers/nfc_provider.dart';
+import 'package:nfdrink/providers/users_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
@@ -13,7 +17,15 @@ import 'package:amplify_api/amplify_api.dart';
 
 import 'amplifyconfiguration.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(MultiProvider(
+      providers: [
+        // Add new providers here
+        ChangeNotifierProvider(create: (context) => NfcProvider()),
+        ChangeNotifierProvider(create: (context) => UsersProvider()),
+        ChangeNotifierProvider(create: (context) => BottlesProvider()),
+      ],
+      child: const MyApp(),
+    ));
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

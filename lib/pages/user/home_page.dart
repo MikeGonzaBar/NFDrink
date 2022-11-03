@@ -1,13 +1,16 @@
-import 'dart:ffi';
+// ignore_for_file: prefer_const_constructors_in_immutables, unused_import
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/login.dart';
+import 'package:nfdrink/pages/user/scan_bad_result.dart';
+import 'package:nfdrink/pages/user/scan_good_result.dart';
+import 'package:nfdrink/providers/nfc_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
+  HomePage({super.key});
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -32,14 +35,68 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(12),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: const Color(0xff494949),
+          decoration: const BoxDecoration(
+              color: Color(0xff494949),
+              borderRadius: BorderRadius.all(Radius.circular(12))),
           child: Column(
-            children: const [
-              Text("Hello"),
+            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    context.watch<NfcProvider>().nfcReadStatusText,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 10,
+                child: GestureDetector(
+                  onTap: () {
+                    context.read<NfcProvider>().scanNfc(context);
+                  },
+                  child: Image.asset(
+                    "assets/imgs/nfdrink_logo_circle.png",
+                    width: MediaQuery.of(context).size.width * .8,
+                  ),
+                ),
+              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.of(context).push(
+              //       MaterialPageRoute(
+              //         builder: (context) => const ScanGoodResultPage(),
+              //       ),
+              //     );
+              //   },
+              //   child: const Text(
+              //     "Temp: go to GOOD scan result page",
+              //   ),
+              // ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ScanBadResultPage(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Temp: go to BAD scan result page",
+                ),
+              ),
             ],
           ),
         ),
