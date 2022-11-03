@@ -61,7 +61,7 @@ class LoginPage extends StatelessWidget {
                       ..pop()
                       ..push(
                         MaterialPageRoute(
-                          builder: (context) => HomePage(),
+                          builder: (context) => const HomePage(),
                         ),
                       );
                   },

@@ -1,13 +1,10 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, unused_import
-
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/user/scan_bad_result.dart';
-import 'package:nfdrink/pages/user/scan_good_result.dart';
 import 'package:nfdrink/providers/nfc_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
