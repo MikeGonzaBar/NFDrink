@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../pages/user/scan_good_result.dart';
 
@@ -19,7 +20,14 @@ class NfcProvider with ChangeNotifier {
     nfcReadStatusText = "Scanning...\nHold your phone near the NFDrink tag";
     notifyListeners();
 
-    // TODO: Get location
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+    }
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    // print(position);
 
     // Scan NFC hardware
     nfcData = await _getNfcData();

@@ -30,13 +30,9 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(25.0),
-                child: Icon(
-                  Icons.place_outlined,
-                  color: Color(0xFF009fb7),
-                  size: 120,
-                ),
+              Image.asset(
+                "assets/imgs/logo_white.png",
+                width: MediaQuery.of(context).size.width * .3,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),

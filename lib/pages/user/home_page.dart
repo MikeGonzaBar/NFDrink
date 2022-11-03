@@ -1,21 +1,18 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, unused_import
-
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/login.dart';
 import 'package:nfdrink/pages/user/scan_bad_result.dart';
-import 'package:nfdrink/pages/user/scan_good_result.dart';
 import 'package:nfdrink/providers/nfc_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
