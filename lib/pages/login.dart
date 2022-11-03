@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:nfdrink/models/AdminUsers.dart';
 import 'package:nfdrink/pages/admin/all_products_info.dart';
 import 'package:nfdrink/pages/register.dart';
 import 'package:nfdrink/pages/user/home_page.dart';
@@ -21,10 +24,22 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Log in to NFDrink'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                signOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.power_settings_new))
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               const Padding(
@@ -68,11 +83,19 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () async {
                     if (await _signIn(
                         userTextController.text, passwordTextController.text)) {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const HomePage(),
-                        ),
-                      );
+                      if (await _isAdmin()) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const AllProductsInfoPage(),
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
+                        );
+                      }
                     } else {
                       showDialog<String>(
                         context: context,
@@ -144,39 +167,43 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<bool> _signIn(usr, pwd) async {
     try {
-      // print(await AmplifyAuthCognito().getCurrentUser());
       final result = await Amplify.Auth.signIn(username: usr, password: pwd);
 
       var isSignedIn = result.isSignedIn;
-      try {
-        final result = await AmplifyAuthCognito().fetchUserAttributes();
-        for (final element in result) {
-          print('key: ${element.userAttributeKey}; value: ${element.value}');
-        }
-      } on AuthException catch (e) {
-        // print(e.message);
-        return false;
-      }
+
       return isSignedIn;
     } on AuthException catch (e) {
-      // safePrint(e.message);
       return false;
     }
   }
 
   Future<void> signOut() async {
     try {
-      final result = await AmplifyAuthCognito().fetchUserAttributes();
-      for (final element in result) {
-        print('key: ${element.userAttributeKey}; value: ${element.value}');
-      }
-    } on AuthException catch (e) {
-      print(e.message);
-    }
-    try {
       await AmplifyAuthCognito().signOut();
     } on AmplifyException catch (e) {
       print(e.message);
     }
+  }
+
+  Future<bool> _isAdmin() async {
+    try {
+      List<AdminUsers> adminList =
+          await Amplify.DataStore.query(AdminUsers.classType);
+      log(adminList.toString());
+      final userAtts = await AmplifyAuthCognito().fetchUserAttributes();
+
+      for (var admin in adminList) {
+        for (final element in userAtts) {
+          log('key: ${element.userAttributeKey}; value: ${element.value} - ${admin.email.toString()}');
+          if (element.value == admin.email.toString()) {
+            log('I AM AN ADMIN');
+            return true;
+          }
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return false;
   }
 }

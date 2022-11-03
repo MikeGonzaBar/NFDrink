@@ -5,7 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:nfdrink/pages/user/home_page.dart';
+
+import 'models/ModelProvider.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
+
+import 'package:amplify_api/amplify_api.dart';
 
 import 'amplifyconfiguration.dart';
 
@@ -28,6 +32,9 @@ class _MyAppState extends State<MyApp> {
   void _configureAmplify() async {
     try {
       await Amplify.addPlugin(AmplifyAuthCognito());
+      await Amplify.addPlugin(
+          AmplifyDataStore(modelProvider: ModelProvider.instance));
+      await Amplify.addPlugin(AmplifyAPI());
       await Amplify.configure(amplifyconfig);
       print('Successfully configured');
     } on Exception catch (e) {
@@ -42,9 +49,9 @@ class _MyAppState extends State<MyApp> {
         // set the dark theme (optional)
         theme: ThemeData.from(
           colorScheme: ColorScheme.fromSeed(
-            seedColor: Color(0xffbe3535),
-            primary: Color(0xffbe3535),
-            background: Color(0xff2d2d2d),
+            seedColor: const Color(0xffbe3535),
+            primary: const Color(0xffbe3535),
+            background: const Color(0xff2d2d2d),
             brightness: Brightness.dark,
           ),
           useMaterial3: true,
@@ -57,7 +64,7 @@ class _MyAppState extends State<MyApp> {
 
         title: 'Material App',
 
-        home: LoginPage(),
+        home: const LoginPage(),
       ),
     );
   }

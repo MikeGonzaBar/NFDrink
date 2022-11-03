@@ -28,17 +28,17 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-              icon: Icon(Icons.power_settings_new))
+              icon: const Icon(Icons.power_settings_new))
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: Color(0xff494949),
+          color: const Color(0xff494949),
           child: Column(
-            children: [
+            children: const [
               Text("Hello"),
             ],
           ),
@@ -50,15 +50,14 @@ class _HomePageState extends State<HomePage> {
   Future<void> signOut() async {
     try {
       final result = await AmplifyAuthCognito().fetchUserAttributes();
+
       for (final element in result) {
         print('key: ${element.userAttributeKey}; value: ${element.value}');
       }
-    } on AuthException catch (e) {
-      print(e.message);
-    }
-    try {
+      // await Amplify.DataStore.clear();
+      // print('DATA CLEARED');
       await AmplifyAuthCognito().signOut();
-    } on AmplifyException catch (e) {
+    } on AuthException catch (e) {
       print(e.message);
     }
   }

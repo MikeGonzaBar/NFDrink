@@ -119,8 +119,7 @@ class _ConfirmUserState extends State<ConfirmUser> {
       return true;
     } on AuthException catch (e) {
       safePrint(e.message);
+      return false;
     }
-
-    return true;
   }
 }

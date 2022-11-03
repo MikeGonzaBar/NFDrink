@@ -1,9 +1,11 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/admin/end_of_scroll_item.dart';
 import 'package:nfdrink/pages/admin/items/product_selection_item.dart';
 import 'package:nfdrink/pages/admin/widgets/category_widget.dart';
 import 'package:nfdrink/pages/admin/widgets/comparationTable_widget.dart';
 import 'package:nfdrink/pages/admin/widgets/comparation_of_two_widget.dart';
+import 'package:nfdrink/pages/login.dart';
 
 class AllProductsInfoPage extends StatefulWidget {
   const AllProductsInfoPage({super.key});
@@ -19,6 +21,18 @@ class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
       appBar: AppBar(
         title: const Text('Tus productos',
             style: TextStyle(fontWeight: FontWeight.w600)),
+        actions: [
+          IconButton(
+              onPressed: () {
+                signOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.power_settings_new))
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -82,5 +96,20 @@ class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
         ),
       ),
     );
+  }
+
+  Future<void> signOut() async {
+    try {
+      final result = await AmplifyAuthCognito().fetchUserAttributes();
+
+      for (final element in result) {
+        print('key: ${element.userAttributeKey}; value: ${element.value}');
+      }
+      // await Amplify.DataStore.clear();
+      // print('DATA CLEARED');
+      await AmplifyAuthCognito().signOut();
+    } on AuthException catch (e) {
+      print(e.message);
+    }
   }
 }

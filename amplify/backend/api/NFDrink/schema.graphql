@@ -1,0 +1,27 @@
+type ScansJSON {
+  scans: String
+  day: AWSDateTime
+  latitude: Float
+  longitude: Float
+}
+
+type Bottles @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  year: String
+  scans: ScansJSON
+  products_id: ID
+}
+
+type Products @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  product_name: String
+  net_content: Float
+  admin_users_ID: ID
+}
+
+type AdminUsers @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  email: String
+  name: String
+}
+ 
