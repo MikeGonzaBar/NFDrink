@@ -49,5 +49,12 @@
         }
       }
     }
+  },
+  "storage": {
+    "s3nfdrinkstoragee25f64ae": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
   }
 }

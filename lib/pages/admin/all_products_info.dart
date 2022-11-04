@@ -8,7 +8,8 @@ import 'package:nfdrink/pages/admin/widgets/comparation_of_two_widget.dart';
 import 'package:nfdrink/pages/login.dart';
 
 class AllProductsInfoPage extends StatefulWidget {
-  const AllProductsInfoPage({super.key});
+  final dynamic adminData;
+  const AllProductsInfoPage({super.key, required this.adminData});
 
   @override
   State<AllProductsInfoPage> createState() => _AllProductsInfoPageState();
@@ -41,10 +42,10 @@ class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  "José Cuervo",
+                  "${widget.adminData["name"]}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontWeight: FontWeight.w900,
@@ -81,10 +82,12 @@ class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 4 + 1,
+                itemCount: widget.adminData["products"].length + 1,
                 itemBuilder: (BuildContext context, int index) {
-                  if (index != 4) {
-                    return const ProductSelectionItem();
+                  if (index != widget.adminData["products"].length) {
+                    return ProductSelectionItem(
+                      productData: widget.adminData["products"][index],
+                    );
                   } else {
                     // If index is last, add ending dot
                     return const EndOfScrollItem();

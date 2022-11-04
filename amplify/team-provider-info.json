@@ -14,6 +14,9 @@
     "categories": {
       "auth": {
         "nfdrinkc9a04017": {}
+      },
+      "storage": {
+        "s3nfdrinkstoragee25f64ae": {}
       }
     }
   }

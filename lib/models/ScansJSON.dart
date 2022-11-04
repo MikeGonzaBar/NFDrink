@@ -26,32 +26,32 @@ import 'package:flutter/foundation.dart';
 /** This is an auto generated class representing the ScansJSON type in your schema. */
 @immutable
 class ScansJSON {
-  final String? _scans;
+  final String? _scanner;
   final TemporalDateTime? _day;
-  final double? _latitude;
-  final double? _longitude;
+  final String? _latitude;
+  final String? _longitude;
 
-  String? get scans {
-    return _scans;
+  String? get scanner {
+    return _scanner;
   }
   
   TemporalDateTime? get day {
     return _day;
   }
   
-  double? get latitude {
+  String? get latitude {
     return _latitude;
   }
   
-  double? get longitude {
+  String? get longitude {
     return _longitude;
   }
   
-  const ScansJSON._internal({scans, day, latitude, longitude}): _scans = scans, _day = day, _latitude = latitude, _longitude = longitude;
+  const ScansJSON._internal({scanner, day, latitude, longitude}): _scanner = scanner, _day = day, _latitude = latitude, _longitude = longitude;
   
-  factory ScansJSON({String? scans, TemporalDateTime? day, double? latitude, double? longitude}) {
+  factory ScansJSON({String? scanner, TemporalDateTime? day, String? latitude, String? longitude}) {
     return ScansJSON._internal(
-      scans: scans,
+      scanner: scanner,
       day: day,
       latitude: latitude,
       longitude: longitude);
@@ -65,7 +65,7 @@ class ScansJSON {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is ScansJSON &&
-      _scans == other._scans &&
+      _scanner == other._scanner &&
       _day == other._day &&
       _latitude == other._latitude &&
       _longitude == other._longitude;
@@ -79,35 +79,35 @@ class ScansJSON {
     var buffer = new StringBuffer();
     
     buffer.write("ScansJSON {");
-    buffer.write("scans=" + "$_scans" + ", ");
+    buffer.write("scanner=" + "$_scanner" + ", ");
     buffer.write("day=" + (_day != null ? _day!.format() : "null") + ", ");
-    buffer.write("latitude=" + (_latitude != null ? _latitude!.toString() : "null") + ", ");
-    buffer.write("longitude=" + (_longitude != null ? _longitude!.toString() : "null"));
+    buffer.write("latitude=" + "$_latitude" + ", ");
+    buffer.write("longitude=" + "$_longitude");
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  ScansJSON copyWith({String? scans, TemporalDateTime? day, double? latitude, double? longitude}) {
+  ScansJSON copyWith({String? scanner, TemporalDateTime? day, String? latitude, String? longitude}) {
     return ScansJSON._internal(
-      scans: scans ?? this.scans,
+      scanner: scanner ?? this.scanner,
       day: day ?? this.day,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude);
   }
   
   ScansJSON.fromJson(Map<String, dynamic> json)  
-    : _scans = json['scans'],
+    : _scanner = json['scanner'],
       _day = json['day'] != null ? TemporalDateTime.fromString(json['day']) : null,
-      _latitude = (json['latitude'] as num?)?.toDouble(),
-      _longitude = (json['longitude'] as num?)?.toDouble();
+      _latitude = json['latitude'],
+      _longitude = json['longitude'];
   
   Map<String, dynamic> toJson() => {
-    'scans': _scans, 'day': _day?.format(), 'latitude': _latitude, 'longitude': _longitude
+    'scanner': _scanner, 'day': _day?.format(), 'latitude': _latitude, 'longitude': _longitude
   };
   
   Map<String, Object?> toMap() => {
-    'scans': _scans, 'day': _day, 'latitude': _latitude, 'longitude': _longitude
+    'scanner': _scanner, 'day': _day, 'latitude': _latitude, 'longitude': _longitude
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -115,7 +115,7 @@ class ScansJSON {
     modelSchemaDefinition.pluralName = "ScansJSONS";
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'scans',
+      fieldName: 'scanner',
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
@@ -129,13 +129,13 @@ class ScansJSON {
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
       fieldName: 'latitude',
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.double)
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
       fieldName: 'longitude',
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.double)
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
   });
 }

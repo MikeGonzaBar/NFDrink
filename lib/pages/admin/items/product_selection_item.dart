@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/admin/one_product_info.dart';
 
 class ProductSelectionItem extends StatelessWidget {
-  const ProductSelectionItem({super.key});
+  final dynamic productData;
+  const ProductSelectionItem({super.key, required this.productData});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context)
-          .push(
-            MaterialPageRoute(
-              builder: (context) => const OneProductInfo(),
-            ),
-          );
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => OneProductInfo(productData: productData),
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
@@ -31,18 +31,18 @@ class ProductSelectionItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    productInfo("Tequila José Cuervo Tradicional Cristalino"),
-                    productInfo("700ml"),
+                    productInfo(productData["product_name"]),
+                    productInfo("${productData["content"].toString()} ml"),
                   ],
                 ),
               ),
               Expanded(
                 flex: 2,
                 child: Image.network(
-                  "https://cdn.shopify.com/s/files/1/0405/5990/2880/products/TEQUILA_JOSE_CUERVO_TRADICIONAL_CRISTALINO_750_ml_Venta_de_licores_mayoreo_bar_a_domicilio_con_entrega_en_casa_comprar_Botellas_con_descuento_Shopping_compras_desde_casa_352x.png?v=1629755996",
+                  productData["image_url"],
                   height: 150,
                 ),
-              )
+              ),
             ],
           ),
         ),

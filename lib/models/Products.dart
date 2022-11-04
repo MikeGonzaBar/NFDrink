@@ -31,6 +31,7 @@ class Products extends Model {
   final String? _product_name;
   final double? _net_content;
   final String? _admin_users_ID;
+  final String? _image_s3_key;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -54,6 +55,10 @@ class Products extends Model {
     return _admin_users_ID;
   }
   
+  String? get image_s3_key {
+    return _image_s3_key;
+  }
+  
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -62,14 +67,15 @@ class Products extends Model {
     return _updatedAt;
   }
   
-  const Products._internal({required this.id, product_name, net_content, admin_users_ID, createdAt, updatedAt}): _product_name = product_name, _net_content = net_content, _admin_users_ID = admin_users_ID, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Products._internal({required this.id, product_name, net_content, admin_users_ID, image_s3_key, createdAt, updatedAt}): _product_name = product_name, _net_content = net_content, _admin_users_ID = admin_users_ID, _image_s3_key = image_s3_key, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Products({String? id, String? product_name, double? net_content, String? admin_users_ID}) {
+  factory Products({String? id, String? product_name, double? net_content, String? admin_users_ID, String? image_s3_key}) {
     return Products._internal(
       id: id == null ? UUID.getUUID() : id,
       product_name: product_name,
       net_content: net_content,
-      admin_users_ID: admin_users_ID);
+      admin_users_ID: admin_users_ID,
+      image_s3_key: image_s3_key);
   }
   
   bool equals(Object other) {
@@ -83,7 +89,8 @@ class Products extends Model {
       id == other.id &&
       _product_name == other._product_name &&
       _net_content == other._net_content &&
-      _admin_users_ID == other._admin_users_ID;
+      _admin_users_ID == other._admin_users_ID &&
+      _image_s3_key == other._image_s3_key;
   }
   
   @override
@@ -98,6 +105,7 @@ class Products extends Model {
     buffer.write("product_name=" + "$_product_name" + ", ");
     buffer.write("net_content=" + (_net_content != null ? _net_content!.toString() : "null") + ", ");
     buffer.write("admin_users_ID=" + "$_admin_users_ID" + ", ");
+    buffer.write("image_s3_key=" + "$_image_s3_key" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -105,12 +113,13 @@ class Products extends Model {
     return buffer.toString();
   }
   
-  Products copyWith({String? id, String? product_name, double? net_content, String? admin_users_ID}) {
+  Products copyWith({String? id, String? product_name, double? net_content, String? admin_users_ID, String? image_s3_key}) {
     return Products._internal(
       id: id ?? this.id,
       product_name: product_name ?? this.product_name,
       net_content: net_content ?? this.net_content,
-      admin_users_ID: admin_users_ID ?? this.admin_users_ID);
+      admin_users_ID: admin_users_ID ?? this.admin_users_ID,
+      image_s3_key: image_s3_key ?? this.image_s3_key);
   }
   
   Products.fromJson(Map<String, dynamic> json)  
@@ -118,21 +127,23 @@ class Products extends Model {
       _product_name = json['product_name'],
       _net_content = (json['net_content'] as num?)?.toDouble(),
       _admin_users_ID = json['admin_users_ID'],
+      _image_s3_key = json['image_s3_key'],
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'product_name': _product_name, 'net_content': _net_content, 'admin_users_ID': _admin_users_ID, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'product_name': _product_name, 'net_content': _net_content, 'admin_users_ID': _admin_users_ID, 'image_s3_key': _image_s3_key, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'product_name': _product_name, 'net_content': _net_content, 'admin_users_ID': _admin_users_ID, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id, 'product_name': _product_name, 'net_content': _net_content, 'admin_users_ID': _admin_users_ID, 'image_s3_key': _image_s3_key, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
   static final QueryField ID = QueryField(fieldName: "id");
   static final QueryField PRODUCT_NAME = QueryField(fieldName: "product_name");
   static final QueryField NET_CONTENT = QueryField(fieldName: "net_content");
   static final QueryField ADMIN_USERS_ID = QueryField(fieldName: "admin_users_ID");
+  static final QueryField IMAGE_S3_KEY = QueryField(fieldName: "image_s3_key");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Products";
     modelSchemaDefinition.pluralName = "Products";
@@ -164,6 +175,12 @@ class Products extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Products.ADMIN_USERS_ID,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Products.IMAGE_S3_KEY,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));

@@ -7,6 +7,8 @@ import 'package:nfdrink/models/AdminUsers.dart';
 import 'package:nfdrink/pages/admin/all_products_info.dart';
 import 'package:nfdrink/pages/register.dart';
 import 'package:nfdrink/pages/user/home_page.dart';
+import 'package:nfdrink/providers/users_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -84,7 +86,9 @@ class _LoginPageState extends State<LoginPage> {
                       if (await _isAdmin()) {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => const AllProductsInfoPage(),
+                            builder: (context) => AllProductsInfoPage(
+                              adminData: context.read<UsersProvider>().getUser,
+                            ),
                           ),
                         );
                       } else {
@@ -117,22 +121,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const AllProductsInfoPage(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    "TEMP Admin Login",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Divider(
@@ -148,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => RegisterPage(),
+                        builder: (context) => const RegisterPage(),
                       ),
                     );
                   },
@@ -164,44 +152,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<bool> _signIn(usr, pwd) async {
-    try {
-      final result = await Amplify.Auth.signIn(username: usr, password: pwd);
+    bool userSignedIn = await context.read<UsersProvider>().signIn(usr, pwd);
 
-      var isSignedIn = result.isSignedIn;
-
-      return isSignedIn;
-    } on AuthException catch (e) {
-      return false;
-    }
+    return userSignedIn;
   }
 
   Future<void> signOut() async {
-    try {
-      await AmplifyAuthCognito().signOut();
-    } on AmplifyException catch (e) {
-      print(e.message);
-    }
+    await context.read<UsersProvider>().signOut();
+
+    return;
   }
 
   Future<bool> _isAdmin() async {
-    try {
-      List<AdminUsers> adminList =
-          await Amplify.DataStore.query(AdminUsers.classType);
-      log(adminList.toString());
-      final userAtts = await AmplifyAuthCognito().fetchUserAttributes();
+    bool userSignedIn = await context.read<UsersProvider>().isAdmin();
 
-      for (var admin in adminList) {
-        for (final element in userAtts) {
-          log('key: ${element.userAttributeKey}; value: ${element.value} - ${admin.email.toString()}');
-          if (element.value == admin.email.toString()) {
-            log('I AM AN ADMIN');
-            return true;
-          }
-        }
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-    return false;
+    return userSignedIn;
   }
 }

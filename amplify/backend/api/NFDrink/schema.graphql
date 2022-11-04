@@ -1,15 +1,16 @@
 type ScansJSON {
-  scans: String
+  scanner: String
   day: AWSDateTime
-  latitude: Float
-  longitude: Float
+  latitude: String
+  longitude: String
 }
 
 type Bottles @model @auth(rules: [{allow: public}]) {
   id: ID!
   year: String
-  scans: ScansJSON
+  scans: [ScansJSON]
   products_id: ID
+  lote: String
 }
 
 type Products @model @auth(rules: [{allow: public}]) {
@@ -17,6 +18,7 @@ type Products @model @auth(rules: [{allow: public}]) {
   product_name: String
   net_content: Float
   admin_users_ID: ID
+  image_s3_key: String
 }
 
 type AdminUsers @model @auth(rules: [{allow: public}]) {

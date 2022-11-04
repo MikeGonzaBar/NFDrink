@@ -1,3 +1,4 @@
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/login.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -47,6 +48,7 @@ class _MyAppState extends State<MyApp> {
       await Amplify.addPlugin(
           AmplifyDataStore(modelProvider: ModelProvider.instance));
       await Amplify.addPlugin(AmplifyAPI());
+      await Amplify.addPlugin(AmplifyStorageS3());
       await Amplify.configure(amplifyconfig);
       print('Successfully configured');
     } on Exception catch (e) {

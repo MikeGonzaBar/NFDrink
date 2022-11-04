@@ -1,6 +1,7 @@
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/user/home_page.dart';
+import 'package:nfdrink/providers/users_provider.dart';
+import 'package:provider/provider.dart';
 
 class ConfirmUser extends StatefulWidget {
   String email;
@@ -23,19 +24,15 @@ class _ConfirmUserState extends State<ConfirmUser> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(25.0),
-                child: Icon(
-                  Icons.place_outlined,
-                  color: Color(0xFF009fb7),
-                  size: 120,
-                ),
+              Image.asset(
+                "assets/imgs/logo_white.png",
+                width: MediaQuery.of(context).size.width * .3,
               ),
-              Text(
-                  "A verification code was sent to your email, please enter it to set up your account"),
+              const Text(
+                  "A verification code was sent to your email, please enter it to finish the set up of your account"),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: TextField(
@@ -43,9 +40,9 @@ class _ConfirmUserState extends State<ConfirmUser> {
                   readOnly: true,
                   decoration: InputDecoration(
                     labelText: widget.email,
-                    border: UnderlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(),
-                    icon: Icon(Icons.person_outline),
+                    border: const UnderlineInputBorder(),
+                    focusedBorder: const OutlineInputBorder(),
+                    icon: const Icon(Icons.person_outline),
                   ),
                 ),
               ),
@@ -106,20 +103,12 @@ class _ConfirmUserState extends State<ConfirmUser> {
   }
 
   Future<bool> _confirmNumber(String email, String number) async {
-    print(email);
-    print(number);
+    // print(email);
+    // print(number);
 
-    try {
-      final result = await Amplify.Auth.confirmSignUp(
-          username: email, confirmationCode: number);
+    bool numberConfirmed =
+        await context.read<UsersProvider>().confirmNumber(email, number);
 
-      print(result);
-      print(result.isSignUpComplete);
-      print(result.nextStep);
-      return true;
-    } on AuthException catch (e) {
-      safePrint(e.message);
-      return false;
-    }
+    return numberConfirmed;
   }
 }

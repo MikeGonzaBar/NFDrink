@@ -5,6 +5,8 @@ import 'package:nfdrink/pages/admin/all_products_info.dart';
 import 'package:intl/intl.dart';
 import 'package:nfdrink/pages/confirm_user.dart';
 import 'package:nfdrink/pages/user/home_page.dart';
+import 'package:nfdrink/providers/users_provider.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -13,14 +15,16 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
+final nameController = TextEditingController();
+final emailController = TextEditingController();
+final pwdController = TextEditingController();
+final confPwdController = TextEditingController();
+final dateController = TextEditingController();
+final genderController = TextEditingController();
+
 class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final pwdController = TextEditingController();
-    final confPwdController = TextEditingController();
-    final dateController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register to NFDrink'),
@@ -111,9 +115,23 @@ class _RegisterPageState extends State<RegisterPage> {
                           DateFormat('yyyy-MM-dd').format(pickedDate);
                       print(formattedDate);
 
-                      dateController.text = formattedDate;
+                      dateController.text =
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                     } else {}
                   },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: TextField(
+                  controller: genderController,
+                  decoration: const InputDecoration(
+                    hintText: 'Male or Female',
+                    labelText: "Gender",
+                    border: UnderlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(),
+                    icon: Icon(Icons.person_search_outlined),
+                  ),
                 ),
               ),
               Padding(
@@ -127,7 +145,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           emailController.text,
                           pwdController.text,
                           confPwdController.text,
-                          dateController.text)) {
+                          dateController.text,
+                          genderController.text)) {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) =>
@@ -166,34 +185,33 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   _registerIn(String name, String email, String pwd, String confPwd,
-      String bday) async {
-    print(name);
-    print(email);
-    print(pwd);
-    print(confPwd);
-    print(bday);
+      String bday, String gender) async {
+    // print(name);
+    // print(email);
+    // print(pwd);
+    // print(confPwd);
+    // print(bday);
+    // print(gender);
 
-    try {
-      final userAttributes = <CognitoUserAttributeKey, String>{
-        CognitoUserAttributeKey.email: email,
-        CognitoUserAttributeKey.birthdate: bday,
-        CognitoUserAttributeKey.name: name,
-
-        // additional attributes as needed
-      };
-      final result = await Amplify.Auth.signUp(
-        username: email,
-        password: pwd,
-        options: CognitoSignUpOptions(userAttributes: userAttributes),
-      );
-
-      print(result);
-      print(result.isSignUpComplete);
-      print(result.nextStep);
-      return true;
-    } on AuthException catch (e) {
-      safePrint(e.message);
+    if (pwd != confPwd ||
+        name == '' ||
+        email == '' ||
+        bday == '' ||
+        pwd == '' ||
+        gender == '') {
       return false;
     }
+
+    dynamic userObj = {
+      'email': email.trim(),
+      'name': name.trim(),
+      'password': pwd,
+      'birthdate': bday,
+      'gender': gender.trim(),
+    };
+    bool userAdded =
+        await context.read<UsersProvider>().registerNewUser(userObj);
+
+    return userAdded;
   }
 }
