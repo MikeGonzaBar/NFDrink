@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:nfdrink/providers/nfc_provider.dart';
-import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class ScanGoodResultPage extends StatelessWidget {
-  const ScanGoodResultPage({super.key});
+  ScanGoodResultPage({super.key, required this.bottleData});
+
+  dynamic bottleData;
+  late var bottleInfo = bottleData[0];
+  late var productInfo = bottleData[1];
+  late var productImageUrl = bottleData[2];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,28 +38,16 @@ class ScanGoodResultPage extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  context.watch<NfcProvider>().nfcData,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
               Expanded(
                 flex: 1,
                 child: Column(
-                  children: const [
+                  children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 20),
+                      padding: const EdgeInsets.only(top: 20),
                       child: Text(
-                        'Tequila José Cuervo Tradicional Cristalino',
+                        '${productInfo.product_name}',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                           fontSize: 18,
@@ -62,9 +55,9 @@ class ScanGoodResultPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '700ml',
+                      '${productInfo.net_content} ml',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
@@ -76,8 +69,8 @@ class ScanGoodResultPage extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Column(
-                  children: const [
-                    Padding(
+                  children: [
+                    const Padding(
                       padding: EdgeInsets.only(top: 20),
                       child: Text(
                         'Año:',
@@ -90,9 +83,9 @@ class ScanGoodResultPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '2021',
+                      '${bottleInfo.year}',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
@@ -104,8 +97,8 @@ class ScanGoodResultPage extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Column(
-                  children: const [
-                    Padding(
+                  children: [
+                    const Padding(
                       padding: EdgeInsets.only(top: 20),
                       child: Text(
                         'Lote:',
@@ -118,9 +111,9 @@ class ScanGoodResultPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '123456',
+                      '${bottleInfo.lote}',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
@@ -162,7 +155,7 @@ class ScanGoodResultPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Image.network(
-                    "https://cdn.shopify.com/s/files/1/0405/5990/2880/products/TEQUILA_JOSE_CUERVO_TRADICIONAL_CRISTALINO_750_ml_Venta_de_licores_mayoreo_bar_a_domicilio_con_entrega_en_casa_comprar_Botellas_con_descuento_Shopping_compras_desde_casa_352x.png?v=1629755996",
+                    productImageUrl,
                     height: 150,
                   ),
                 ),

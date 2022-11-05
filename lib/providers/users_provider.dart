@@ -31,7 +31,7 @@ class UsersProvider with ChangeNotifier {
 
       return true;
     } on AuthException catch (e) {
-      safePrint(e.message);
+      safePrint(e.toString());
       return false;
     }
   }
@@ -43,7 +43,7 @@ class UsersProvider with ChangeNotifier {
 
       return true;
     } on AuthException catch (e) {
-      safePrint(e.message);
+      safePrint(e.toString());
       return false;
     }
   }
@@ -161,7 +161,7 @@ class UsersProvider with ChangeNotifier {
         where: Bottles.PRODUCTS_ID.eq(id));
 
     if (bottles.isEmpty) {
-      log("No bottles of_product: $id");
+      log("No bottles of product: $id");
       return [];
     }
 

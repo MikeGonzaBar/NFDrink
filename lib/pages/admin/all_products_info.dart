@@ -131,7 +131,7 @@ class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
     try {
       await AmplifyAuthCognito().signOut();
     } on AuthException catch (e) {
-      log(e.message);
+      log(e.toString());
     }
   }
 

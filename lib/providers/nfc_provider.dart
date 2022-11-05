@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../pages/user/scan_good_result.dart';
-
 class NfcProvider with ChangeNotifier {
   // Variables
   bool isReadingNfc = false;
@@ -14,7 +12,7 @@ class NfcProvider with ChangeNotifier {
   String nfcData = "";
 
   // Methods
-  Future<void> scanNfc(BuildContext context) async {
+  Future<String> scanNfc(BuildContext context) async {
     // Update screen text
     isReadingNfc = true;
     nfcReadStatusText = "Scanning...\nHold your phone near the NFDrink tag";
@@ -32,19 +30,16 @@ class NfcProvider with ChangeNotifier {
     // Scan NFC hardware
     nfcData = await _getNfcData();
 
-    if (nfcData.contains("NFDrinkID:")) {
+    if (nfcData.contains("nfdrinkid:")) {
       resetNfcReadingState();
-      // Show result screen
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const ScanGoodResultPage()));
+      // Return bottle ID
+      return nfcData.split("nfdrinkid:")[1];
     } else {
-      // Update screen text
       resetNfcReadingState();
       nfcReadStatusText =
           "Oops! We couldn't scan that tag\nPlease tap to try again";
+      return "error";
     }
-    notifyListeners();
   }
 
   Future<String> _getNfcData() async {
@@ -68,10 +63,8 @@ class NfcProvider with ChangeNotifier {
       if (tag.ndefAvailable == true) {
         // Print decoded NDEF records
         for (var record in await FlutterNfcKit.readNDEFRecords(cached: false)) {
-          // log(record);
           log(record.toString().split("text=")[1]);
           scannedText = record.toString().split("text=")[1];
-          // setState(() {});
         }
 
         // Print Raw NDEF records (data in hex string)
