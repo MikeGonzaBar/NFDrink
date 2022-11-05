@@ -5,6 +5,7 @@ import 'package:age_calculator/age_calculator.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:nfdrink/models/ModelProvider.dart';
 
@@ -47,6 +48,8 @@ class BottlesProvider with ChangeNotifier {
         List<ScansJSON> newScans = bottles.first.scans!;
         newScans.add(scanToAdd);
 
+        List<String> localities = [];
+
         // Update scans array on database
         try {
           final updatedObject =
@@ -56,11 +59,21 @@ class BottlesProvider with ChangeNotifier {
 
           log('Added scan. Updated Bottle object:');
           log(getPrettyJSONString(updatedObject));
+
+          for (var scan in updatedObject.scans!) {
+            List<Placemark> placemarks = await placemarkFromCoordinates(
+              double.parse(scan.latitude!),
+              double.parse(scan.longitude!),
+            );
+            String locality = placemarks[0].locality!;
+            localities.add(locality);
+          }
         } catch (e) {
           log(e.toString());
         }
 
-        return [bottles.first, products.first, imageUrl];
+        log(localities.toString());
+        return [bottles.first, products.first, imageUrl, localities];
       }
     } catch (e) {
       log(e.toString());
@@ -77,6 +90,14 @@ class BottlesProvider with ChangeNotifier {
     } on StorageException {
       return 'https://whetstonefire.org/wp-content/uploads/2020/06/image-not-available.jpg';
     }
+  }
+
+  Future<String> getLocalityFromCoords(latitude, longitude) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      double.parse(latitude),
+      double.parse(longitude),
+    );
+    return placemarks[0].locality!;
   }
 
   String getPrettyJSONString(jsonObject) {
