@@ -12,7 +12,7 @@ class NfcProvider with ChangeNotifier {
   String nfcData = "";
 
   // Methods
-  Future<String> scanNfc(BuildContext context) async {
+  Future<String> scanNfc() async {
     // Update screen text
     isReadingNfc = true;
     nfcReadStatusText = "Scanning...\nHold your phone near the NFDrink tag";

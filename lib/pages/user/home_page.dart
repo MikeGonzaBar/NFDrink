@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                 child: GestureDetector(
                   onTap: () async {
                     String bottleId =
-                        await context.read<NfcProvider>().scanNfc(context);
+                        await context.read<NfcProvider>().scanNfc();
                     if (bottleId != "error") {
                       dynamic bottleData = await context
                           .read<BottlesProvider>()
