@@ -47,7 +47,6 @@ class _HomePageState extends State<HomePage> {
               color: Color(0xff494949),
               borderRadius: BorderRadius.all(Radius.circular(12))),
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
               Expanded(
@@ -87,18 +86,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     Navigator.of(context).push(
-              //       MaterialPageRoute(
-              //         builder: (context) => const ScanGoodResultPage(),
-              //       ),
-              //     );
-              //   },
-              //   child: const Text(
-              //     "Temp: go to GOOD scan result page",
-              //   ),
-              // ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(
