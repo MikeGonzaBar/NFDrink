@@ -23,9 +23,6 @@ class NfcProvider with ChangeNotifier {
         permission == LocationPermission.deniedForever) {
       permission = await Geolocator.requestPermission();
     }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    // print(position);
 
     // Scan NFC hardware
     nfcData = await _getNfcData();
@@ -57,13 +54,13 @@ class NfcProvider with ChangeNotifier {
       );
 
       // Print tag data
-      log(getPrettyJSONString(tag));
+      // log(getPrettyJSONString(tag));
 
       // Read NDEF records if available
       if (tag.ndefAvailable == true) {
         // Print decoded NDEF records
         for (var record in await FlutterNfcKit.readNDEFRecords(cached: false)) {
-          log(record.toString().split("text=")[1]);
+          // log(record.toString().split("text=")[1]);
           scannedText = record.toString().split("text=")[1];
         }
 
