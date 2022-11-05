@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-nfdrink-dev-102318-authRole",
+      "UnauthRoleArn": "arn:aws:iam::542850676574:role/amplify-nfdrink-dev-102318-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::542850676574:role/amplify-nfdrink-dev-102318-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-nfdrink-dev-102318-deployment",
+      "UnauthRoleName": "amplify-nfdrink-dev-102318-unauthRole",
+      "StackName": "amplify-nfdrink-dev-102318",
+      "StackId": "arn:aws:cloudformation:us-east-2:542850676574:stack/amplify-nfdrink-dev-102318/55af0ed0-5938-11ed-9346-026bc597aeb6",
+      "AmplifyAppId": "d19bink5osttm2"
+    },
+    "categories": {
+      "auth": {
+        "nfdrinkc9a04017": {}
+      },
+      "storage": {
+        "s3nfdrinkstoragee25f64ae": {}
+      }
+    }
+  }
+}

@@ -2,17 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/admin/all_products_info.dart';
 import 'package:nfdrink/pages/register.dart';
 import 'package:nfdrink/pages/user/home_page.dart';
+import 'package:nfdrink/providers/users_provider.dart';
+import 'package:provider/provider.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-  final userTextController = TextEditingController();
-  final passwordTextController = TextEditingController();
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
   Widget build(BuildContext context) {
+    final userTextController = TextEditingController();
+    final passwordTextController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Log in to NFDrink'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                signOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.power_settings_new))
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -30,9 +49,9 @@ class LoginPage extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: "Email",
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    labelStyle: TextStyle(color: Colors.white),
+                    border: UnderlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(),
+                    icon: Icon(Icons.mail_outline),
                   ),
                 ),
               ),
@@ -46,9 +65,9 @@ class LoginPage extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: "Password",
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    labelStyle: TextStyle(color: Colors.white),
+                    border: UnderlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(),
+                    icon: Icon(Icons.lock_outline),
                   ),
                 ),
               ),
@@ -56,34 +75,43 @@ class LoginPage extends StatelessWidget {
                 width: double.infinity,
                 height: 45,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                      ..pop()
-                      ..push(
-                        MaterialPageRoute(
-                          builder: (context) => const HomePage(),
+                  onPressed: () async {
+                    if (await _signIn(
+                        userTextController.text, passwordTextController.text)) {
+                      if (await _isAdmin()) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => AllProductsInfoPage(
+                              adminData: context.read<UsersProvider>().getUser,
+                            ),
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
+                        );
+                      }
+                    } else {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Error signing in'),
+                          content: const Text(
+                              'There was an error signing in, please try again.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text('OK'),
+                            ),
+                          ],
                         ),
                       );
+                    }
                   },
                   child: const Text(
-                    "LOG IN",
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                      ..pop()
-                      ..push(
-                        MaterialPageRoute(
-                          builder: (context) => const AllProductsInfoPage(),
-                        ),
-                      );
-                  },
-                  child: const Text(
-                    "TEMP Admin Login",
+                    "Log in",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -101,15 +129,14 @@ class LoginPage extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context)
-                      ..pop()
-                      ..push(
-                        MaterialPageRoute(
-                          builder: (context) => RegisterPage(),
-                        ),
-                      );
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterPage(),
+                      ),
+                    );
                   },
-                  child: const Text("REGISTER"),
+                  child: const Text("Register",
+                      style: TextStyle(color: Colors.white)),
                 ),
               ),
             ],
@@ -117,5 +144,23 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<bool> _signIn(usr, pwd) async {
+    bool userSignedIn = await context.read<UsersProvider>().signIn(usr, pwd);
+
+    return userSignedIn;
+  }
+
+  Future<void> signOut() async {
+    await context.read<UsersProvider>().signOut();
+
+    return;
+  }
+
+  Future<bool> _isAdmin() async {
+    bool userSignedIn = await context.read<UsersProvider>().isAdmin();
+
+    return userSignedIn;
   }
 }

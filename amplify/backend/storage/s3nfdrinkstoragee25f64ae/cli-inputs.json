@@ -1,0 +1,16 @@
+{
+  "resourceName": "s3nfdrinkstoragee25f64ae",
+  "bucketName": "nfdrink-storage-e25f64ae",
+  "policyUUID": "4754d90a",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ",
+    "CREATE_AND_UPDATE",
+    "DELETE"
+  ],
+  "authAccess": [
+    "READ",
+    "CREATE_AND_UPDATE",
+    "DELETE"
+  ]
+}

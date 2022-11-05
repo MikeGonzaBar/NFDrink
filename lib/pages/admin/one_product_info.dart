@@ -5,7 +5,8 @@ import 'package:nfdrink/pages/admin/widgets/comparation_of_two_widget.dart';
 import 'package:nfdrink/pages/admin/widgets/week_day_comparation_widget.dart';
 
 class OneProductInfo extends StatelessWidget {
-  const OneProductInfo({super.key});
+  final dynamic productData;
+  const OneProductInfo({super.key, required this.productData});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class OneProductInfo extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: Image.network(
-                      "https://cdn.shopify.com/s/files/1/0405/5990/2880/products/TEQUILA_JOSE_CUERVO_TRADICIONAL_CRISTALINO_750_ml_Venta_de_licores_mayoreo_bar_a_domicilio_con_entrega_en_casa_comprar_Botellas_con_descuento_Shopping_compras_desde_casa_352x.png?v=1629755996",
+                      productData["image_url"],
                       height: 150,
                     ),
                   ),
@@ -36,38 +37,57 @@ class OneProductInfo extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        productInfo(
-                            "Tequila José Cuervo Tradicional Cristalino"),
-                        productInfo("700ml"),
+                        productInfo(productData["product_name"]),
+                        productInfo("${productData["content"].toString()} ml"),
                       ],
                     ),
                   ),
                 ],
               ),
               const Category(title: "Circulación:"),
-              const ComparationOfTwo(
-                  firstColumn: "Escaneadas",
-                  secondColumn: "Sin escanear",
-                  firstData: "550",
-                  secondData: "5500"),
+              ComparationOfTwo(
+                firstColumn: "Escaneadas",
+                secondColumn: "Sin escanear",
+                firstData: "${productData["scanned"]}",
+                secondData: "${productData["unscanned"]}",
+              ),
               const Category(title: "Ubicación mas popular"),
-              const ComparationOfTwo(
-                firstColumn: "Latitud",
-                firstData: "20.648471",
-                secondColumn: "Longitud",
-                secondData: "-103.437416",
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  color: const Color(0xff494949),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
+                  child: Text(
+                    "${productData["locality"]}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
               const Category(title: "Distribución por sexo"),
-              const ComparationOfTwoByTwo(),
+              SexDistrWidget(
+                femaleAvg: productData["female_ages"],
+                femaleQtty: productData["female_count"],
+                maleAvg: productData["male_ages"],
+                maleQtty: productData["male_count"],
+              ),
               const Category(title: "Distribución por día de la semana"),
-              const WeekDayComparation(
-                  monday: "5",
-                  tuesday: "5",
-                  wednesday: "20",
-                  thursday: "20",
-                  friday: "220",
-                  saturday: "250",
-                  sunday: "30")
+              WeekDayComparation(
+                monday: productData['weekday_map'][1].toString(),
+                tuesday: productData['weekday_map'][2].toString(),
+                wednesday: productData['weekday_map'][3].toString(),
+                thursday: productData['weekday_map'][4].toString(),
+                friday: productData['weekday_map'][5].toString(),
+                saturday: productData['weekday_map'][6].toString(),
+                sunday: productData['weekday_map'][7].toString(),
+              )
             ],
           ),
         ),

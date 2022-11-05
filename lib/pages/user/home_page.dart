@@ -1,15 +1,38 @@
+import 'dart:developer';
+
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'package:nfdrink/pages/login.dart';
 import 'package:nfdrink/pages/user/scan_bad_result.dart';
 import 'package:nfdrink/providers/nfc_provider.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('NFDrink'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                signOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.power_settings_new))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),
@@ -79,5 +102,13 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> signOut() async {
+    try {
+      await AmplifyAuthCognito().signOut();
+    } on AuthException catch (e) {
+      log(e.message);
+    }
   }
 }
