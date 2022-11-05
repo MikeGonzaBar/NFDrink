@@ -70,6 +70,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () async {
                     String bottleId =
                         await context.read<NfcProvider>().scanNfc();
+                    setState(() {});
                     if (bottleId != "error") {
                       dynamic bottleData = await context
                           .read<BottlesProvider>()
@@ -78,24 +79,15 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) => ScanGoodResultPage(
                                 bottleData: bottleData,
                               )));
+                    } else {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ScanBadResultPage()));
                     }
                   },
                   child: Image.asset(
                     "assets/imgs/nfdrink_logo_circle.png",
                     width: MediaQuery.of(context).size.width * .8,
                   ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const ScanBadResultPage(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  "Temp: go to BAD scan result page",
                 ),
               ),
             ],

@@ -33,8 +33,6 @@ class NfcProvider with ChangeNotifier {
       return nfcData.split("nfdrinkid:")[1];
     } else {
       resetNfcReadingState();
-      nfcReadStatusText =
-          "Oops! We couldn't scan that tag\nPlease tap to try again";
       return "error";
     }
   }
@@ -48,6 +46,7 @@ class NfcProvider with ChangeNotifier {
 
       // Start scanning
       // Timeout only works on Android
+
       var tag = await FlutterNfcKit.poll(
         timeout: const Duration(hours: 1),
         androidPlatformSound: true,
@@ -57,6 +56,7 @@ class NfcProvider with ChangeNotifier {
       // log(getPrettyJSONString(tag));
 
       // Read NDEF records if available
+
       if (tag.ndefAvailable == true) {
         // Print decoded NDEF records
         for (var record in await FlutterNfcKit.readNDEFRecords(cached: false)) {
@@ -69,6 +69,9 @@ class NfcProvider with ChangeNotifier {
         //     in await FlutterNfcKit.readNDEFRawRecords(cached: false)) {
         //   log(jsonEncode(record).toString());
         // }
+      } else {
+        // Tag didn't have NFDrink bottle id
+        scannedText = "error";
       }
     } catch (e) {
       scannedText = "error";
