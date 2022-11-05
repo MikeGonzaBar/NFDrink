@@ -50,7 +50,8 @@ class UsersProvider with ChangeNotifier {
 
   Future<bool> signIn(usr, pwd) async {
     try {
-      final result = await Amplify.Auth.signIn(username: usr, password: pwd);
+      final result =
+          await Amplify.Auth.signIn(username: usr.trim(), password: pwd.trim());
 
       var isSignedIn = result.isSignedIn;
 
