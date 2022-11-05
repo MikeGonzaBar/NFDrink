@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ComparationOfTwoByTwo extends StatelessWidget {
-  const ComparationOfTwoByTwo({super.key});
+class SexDistrWidget extends StatelessWidget {
+  final int maleQtty;
+  final int femaleQtty;
+  final List<int> maleAvg;
+  final List<int> femaleAvg;
+  const SexDistrWidget({
+    super.key,
+    required this.maleQtty,
+    required this.femaleQtty,
+    required this.maleAvg,
+    required this.femaleAvg,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +54,12 @@ class ComparationOfTwoByTwo extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
-                    "350",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    "$maleQtty",
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
-                  Text(
+                  const Text(
                     "Cantidad",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -57,20 +67,20 @@ class ComparationOfTwoByTwo extends StatelessWidget {
                         color: Colors.white),
                   ),
                   Text(
-                    "200",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    "$femaleQtty",
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ],
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
-                  "25",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  "${_getAvg(maleAvg)}",
+                  style: const TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                Text(
+                const Text(
                   "Edad Promedio",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -78,8 +88,8 @@ class ComparationOfTwoByTwo extends StatelessWidget {
                       color: Colors.white),
                 ),
                 Text(
-                  "40",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  "${_getAvg(femaleAvg)}",
+                  style: const TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ],
             ),
@@ -87,5 +97,17 @@ class ComparationOfTwoByTwo extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _getAvg(List list) {
+    if (list.isEmpty) {
+      return 0;
+    }
+    int sum = 0;
+    for (int age in list) {
+      sum += age;
+    }
+    var avg = sum / list.length;
+    return avg.ceil();
   }
 }

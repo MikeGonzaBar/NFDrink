@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/login.dart';
@@ -50,9 +52,8 @@ class _MyAppState extends State<MyApp> {
       await Amplify.addPlugin(AmplifyAPI());
       await Amplify.addPlugin(AmplifyStorageS3());
       await Amplify.configure(amplifyconfig);
-      print('Successfully configured');
     } on Exception catch (e) {
-      print('Error configuring Amplify: $e');
+      log('Error configuring Amplify: $e');
     }
   }
 

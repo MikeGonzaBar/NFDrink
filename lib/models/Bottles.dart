@@ -24,7 +24,6 @@ import 'package:amplify_core/amplify_core.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
-
 /** This is an auto generated class representing the Bottles type in your schema. */
 @immutable
 class Bottles extends Model {
@@ -39,179 +38,211 @@ class Bottles extends Model {
 
   @override
   getInstanceType() => classType;
-  
+
   @override
   String getId() {
     return id;
   }
-  
+
   String? get year {
     return _year;
   }
-  
+
   List<ScansJSON>? get scans {
     return _scans;
   }
-  
+
   String? get products_id {
     return _products_id;
   }
-  
+
   String? get lote {
     return _lote;
   }
-  
+
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
-  
+
   TemporalDateTime? get updatedAt {
     return _updatedAt;
   }
-  
-  const Bottles._internal({required this.id, year, scans, products_id, lote, createdAt, updatedAt}): _year = year, _scans = scans, _products_id = products_id, _lote = lote, _createdAt = createdAt, _updatedAt = updatedAt;
-  
-  factory Bottles({String? id, String? year, List<ScansJSON>? scans, String? products_id, String? lote}) {
+
+  const Bottles._internal(
+      {required this.id, year, scans, products_id, lote, createdAt, updatedAt})
+      : _year = year,
+        _scans = scans,
+        _products_id = products_id,
+        _lote = lote,
+        _createdAt = createdAt,
+        _updatedAt = updatedAt;
+
+  factory Bottles(
+      {String? id,
+      String? year,
+      List<ScansJSON>? scans,
+      String? products_id,
+      String? lote}) {
     return Bottles._internal(
-      id: id == null ? UUID.getUUID() : id,
-      year: year,
-      scans: scans != null ? List<ScansJSON>.unmodifiable(scans) : scans,
-      products_id: products_id,
-      lote: lote);
+        id: id == null ? UUID.getUUID() : id,
+        year: year,
+        scans: scans != null ? List<ScansJSON>.unmodifiable(scans) : scans,
+        products_id: products_id,
+        lote: lote);
   }
-  
+
   bool equals(Object other) {
     return this == other;
   }
-  
+
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Bottles &&
-      id == other.id &&
-      _year == other._year &&
-      DeepCollectionEquality().equals(_scans, other._scans) &&
-      _products_id == other._products_id &&
-      _lote == other._lote;
+        id == other.id &&
+        _year == other._year &&
+        DeepCollectionEquality().equals(_scans, other._scans) &&
+        _products_id == other._products_id &&
+        _lote == other._lote;
   }
-  
+
   @override
   int get hashCode => toString().hashCode;
-  
+
   @override
   String toString() {
     var buffer = new StringBuffer();
-    
+
     buffer.write("Bottles {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("year=" + "$_year" + ", ");
-    buffer.write("scans=" + (_scans != null ? _scans!.toString() : "null") + ", ");
+    buffer.write(
+        "scans=" + (_scans != null ? _scans!.toString() : "null") + ", ");
     buffer.write("products_id=" + "$_products_id" + ", ");
     buffer.write("lote=" + "$_lote" + ", ");
-    buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
+    buffer.write("createdAt=" +
+        (_createdAt != null ? _createdAt!.format() : "null") +
+        ", ");
+    buffer.write(
+        "updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
-    
+
     return buffer.toString();
   }
-  
-  Bottles copyWith({String? id, String? year, List<ScansJSON>? scans, String? products_id, String? lote}) {
+
+  Bottles copyWith(
+      {String? id,
+      String? year,
+      List<ScansJSON>? scans,
+      String? products_id,
+      String? lote}) {
     return Bottles._internal(
-      id: id ?? this.id,
-      year: year ?? this.year,
-      scans: scans ?? this.scans,
-      products_id: products_id ?? this.products_id,
-      lote: lote ?? this.lote);
+        id: id ?? this.id,
+        year: year ?? this.year,
+        scans: scans ?? this.scans,
+        products_id: products_id ?? this.products_id,
+        lote: lote ?? this.lote);
   }
-  
-  Bottles.fromJson(Map<String, dynamic> json)  
-    : id = json['id'],
-      _year = json['year'],
-      _scans = json['scans'] is List
-        ? (json['scans'] as List)
-          .where((e) => e != null)
-          .map((e) => ScansJSON.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
-          .toList()
-        : null,
-      _products_id = json['products_id'],
-      _lote = json['lote'],
-      _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
-  
+
+  Bottles.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        _year = json['year'],
+        _scans = json['scans'] is List
+            ? (json['scans'] as List)
+                .where((e) => e != null)
+                .map((e) => ScansJSON.fromJson(
+                    new Map<String, dynamic>.from(e['serializedData'])))
+                .toList()
+            : null,
+        _products_id = json['products_id'],
+        _lote = json['lote'],
+        _createdAt = json['createdAt'] != null
+            ? TemporalDateTime.fromString(json['createdAt'])
+            : null,
+        _updatedAt = json['updatedAt'] != null
+            ? TemporalDateTime.fromString(json['updatedAt'])
+            : null;
+
   Map<String, dynamic> toJson() => {
-    'id': id, 'year': _year, 'scans': _scans?.map((ScansJSON? e) => e?.toJson()).toList(), 'products_id': _products_id, 'lote': _lote, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
-  };
-  
+        'id': id,
+        'year': _year,
+        'scans': _scans?.map((ScansJSON? e) => e?.toJson()).toList(),
+        'products_id': _products_id,
+        'lote': _lote,
+        'createdAt': _createdAt?.format(),
+        'updatedAt': _updatedAt?.format()
+      };
+
   Map<String, Object?> toMap() => {
-    'id': id, 'year': _year, 'scans': _scans, 'products_id': _products_id, 'lote': _lote, 'createdAt': _createdAt, 'updatedAt': _updatedAt
-  };
+        'id': id,
+        'year': _year,
+        'scans': _scans,
+        'products_id': _products_id,
+        'lote': _lote,
+        'createdAt': _createdAt,
+        'updatedAt': _updatedAt
+      };
 
   static final QueryField ID = QueryField(fieldName: "id");
   static final QueryField YEAR = QueryField(fieldName: "year");
   static final QueryField SCANS = QueryField(fieldName: "scans");
   static final QueryField PRODUCTS_ID = QueryField(fieldName: "products_id");
   static final QueryField LOTE = QueryField(fieldName: "lote");
-  static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
+  static var schema =
+      Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Bottles";
     modelSchemaDefinition.pluralName = "Bottles";
-    
+
     modelSchemaDefinition.authRules = [
-      AuthRule(
-        authStrategy: AuthStrategy.PUBLIC,
-        operations: [
-          ModelOperation.CREATE,
-          ModelOperation.UPDATE,
-          ModelOperation.DELETE,
-          ModelOperation.READ
-        ])
+      AuthRule(authStrategy: AuthStrategy.PUBLIC, operations: const [
+        ModelOperation.CREATE,
+        ModelOperation.UPDATE,
+        ModelOperation.DELETE,
+        ModelOperation.READ
+      ])
     ];
-    
+
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
-    
+
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Bottles.YEAR,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
+        key: Bottles.YEAR,
+        isRequired: false,
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+
     modelSchemaDefinition.addField(ModelFieldDefinition.embedded(
-      fieldName: 'scans',
-      isRequired: false,
-      isArray: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'ScansJSON')
-    ));
-    
+        fieldName: 'scans',
+        isRequired: false,
+        isArray: true,
+        ofType: ModelFieldType(ModelFieldTypeEnum.embeddedCollection,
+            ofCustomTypeName: 'ScansJSON')));
+
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Bottles.PRODUCTS_ID,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
+        key: Bottles.PRODUCTS_ID,
+        isRequired: false,
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Bottles.LOTE,
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
+        key: Bottles.LOTE,
+        isRequired: false,
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
-      fieldName: 'createdAt',
-      isRequired: false,
-      isReadOnly: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
-    ));
-    
+        fieldName: 'createdAt',
+        isRequired: false,
+        isReadOnly: true,
+        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
+
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
-      fieldName: 'updatedAt',
-      isRequired: false,
-      isReadOnly: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
-    ));
+        fieldName: 'updatedAt',
+        isRequired: false,
+        isReadOnly: true,
+        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
   });
 }
 
 class _BottlesModelType extends ModelType<Bottles> {
   const _BottlesModelType();
-  
+
   @override
   Bottles fromJson(Map<String, dynamic> jsonData) {
     return Bottles.fromJson(jsonData);

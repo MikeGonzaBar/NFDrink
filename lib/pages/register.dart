@@ -1,10 +1,6 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:nfdrink/pages/admin/all_products_info.dart';
 import 'package:intl/intl.dart';
 import 'package:nfdrink/pages/confirm_user.dart';
-import 'package:nfdrink/pages/user/home_page.dart';
 import 'package:nfdrink/providers/users_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -110,11 +106,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         lastDate: DateTime.now());
 
                     if (pickedDate != null) {
-                      print(pickedDate);
-                      String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(formattedDate);
-
                       dateController.text =
                           DateFormat('yyyy-MM-dd').format(pickedDate);
                     } else {}
@@ -186,13 +177,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _registerIn(String name, String email, String pwd, String confPwd,
       String bday, String gender) async {
-    // print(name);
-    // print(email);
-    // print(pwd);
-    // print(confPwd);
-    // print(bday);
-    // print(gender);
-
     if (pwd != confPwd ||
         name == '' ||
         email == '' ||

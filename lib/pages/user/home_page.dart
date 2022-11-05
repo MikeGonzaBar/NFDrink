@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/login.dart';
 import 'package:nfdrink/pages/user/scan_bad_result.dart';
@@ -7,6 +8,8 @@ import 'package:nfdrink/providers/nfc_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -103,16 +106,9 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> signOut() async {
     try {
-      final result = await AmplifyAuthCognito().fetchUserAttributes();
-
-      for (final element in result) {
-        print('key: ${element.userAttributeKey}; value: ${element.value}');
-      }
-      // await Amplify.DataStore.clear();
-      // print('DATA CLEARED');
       await AmplifyAuthCognito().signOut();
     } on AuthException catch (e) {
-      print(e.message);
+      log(e.message);
     }
   }
 }

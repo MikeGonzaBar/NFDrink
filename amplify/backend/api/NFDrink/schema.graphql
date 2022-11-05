@@ -1,8 +1,10 @@
 type ScansJSON {
-  scanner: String
-  day: AWSDateTime
-  latitude: String
+  scannerName: String
+  scannerAge: String
+  scannerSex: String
   longitude: String
+  latitude: String
+  day: AWSDateTime
 }
 
 type Bottles @model @auth(rules: [{allow: public}]) {

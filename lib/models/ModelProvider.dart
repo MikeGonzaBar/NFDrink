@@ -32,7 +32,7 @@ export 'ScansJSON.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "d115b79fd169f1f8b9929e5708e22583";
+  String version = "67ec10b0d6163f726d737041dbc07597";
   @override
   List<ModelSchema> modelSchemas = [AdminUsers.schema, Bottles.schema, Products.schema];
   static final ModelProvider _instance = ModelProvider();

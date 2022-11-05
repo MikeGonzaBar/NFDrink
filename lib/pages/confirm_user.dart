@@ -4,9 +4,9 @@ import 'package:nfdrink/providers/users_provider.dart';
 import 'package:provider/provider.dart';
 
 class ConfirmUser extends StatefulWidget {
-  String email;
+  final String email;
 
-  ConfirmUser({super.key, required this.email});
+  const ConfirmUser({super.key, required this.email});
 
   @override
   State<ConfirmUser> createState() => _ConfirmUserState();
@@ -68,7 +68,7 @@ class _ConfirmUserState extends State<ConfirmUser> {
                           widget.email, numberController.text)) {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => HomePage(),
+                            builder: (context) => const HomePage(),
                           ),
                         );
                       } else {

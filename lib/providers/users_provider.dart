@@ -20,10 +20,8 @@ class UsersProvider with ChangeNotifier {
         CognitoUserAttributeKey.birthdate: userObj['birthdate'],
         CognitoUserAttributeKey.name: userObj['name'],
         CognitoUserAttributeKey.gender: userObj['gender']
-
-        // additional attributes as needed
       };
-      final result = await Amplify.Auth.signUp(
+      await Amplify.Auth.signUp(
         username: userObj['email'],
         password: userObj['password'],
         options: CognitoSignUpOptions(
@@ -31,9 +29,6 @@ class UsersProvider with ChangeNotifier {
         ),
       );
 
-      // print(result);
-      // print(result.isSignUpComplete);
-      // print(result.nextStep);
       return true;
     } on AuthException catch (e) {
       safePrint(e.message);
@@ -42,16 +37,10 @@ class UsersProvider with ChangeNotifier {
   }
 
   Future<bool> confirmNumber(String email, String number) async {
-    // print(email);
-    // print(number);
-
     try {
-      final result = await Amplify.Auth.confirmSignUp(
+      await Amplify.Auth.confirmSignUp(
           username: email, confirmationCode: number);
 
-      // print(result);
-      // print(result.isSignUpComplete);
-      // print(result.nextStep);
       return true;
     } on AuthException catch (e) {
       safePrint(e.message);
@@ -66,7 +55,7 @@ class UsersProvider with ChangeNotifier {
       var isSignedIn = result.isSignedIn;
 
       return isSignedIn;
-    } on AuthException catch (e) {
+    } on AuthException {
       return false;
     }
   }
@@ -75,7 +64,7 @@ class UsersProvider with ChangeNotifier {
     try {
       await AmplifyAuthCognito().signOut();
     } on AmplifyException catch (e) {
-      print(e.message);
+      log(e.toString());
     }
   }
 
@@ -83,19 +72,16 @@ class UsersProvider with ChangeNotifier {
     try {
       List<AdminUsers> adminList =
           await Amplify.DataStore.query(AdminUsers.classType);
-      log(adminList.toString());
+
       final userAtts = await AmplifyAuthCognito().fetchUserAttributes();
 
       for (var admin in adminList) {
         for (final element in userAtts) {
-          log('key: ${element.userAttributeKey}; value: ${element.value} - ${admin.email.toString()}');
           if (element.value == admin.email.toString()) {
-            // log('I AM AN ADMIN');
-
             List products = await getProductsByOwner(admin.id);
             _user["products"] = products;
             _user["name"] = admin.name.toString();
-            log(_user.toString());
+
             return true;
           }
         }
@@ -138,18 +124,22 @@ class UsersProvider with ChangeNotifier {
         productObject["scanned"] = scannedNumber;
         productObject["unscanned"] = unscannedNumber;
         productObject["locality"] = scannedStats["most_popular_locality"];
+        productObject["male_count"] = scannedStats["male_count"];
+        productObject["female_count"] = scannedStats["female_count"];
+        productObject["male_ages"] = scannedStats["male_ages"];
+        productObject["female_ages"] = scannedStats["female_ages"];
+        productObject["weekday_map"] = scannedStats["weekday_map"];
 
         //Obtener la ubicación mas popular
 
         newProductList.add(productObject);
       }
-      // log(newProductList.toString());
 
       _productsList = newProductList;
 
       return _productsList;
     } catch (e) {
-      // log(e.toString());
+      log(e.toString());
       return [];
     }
   }
@@ -159,12 +149,9 @@ class UsersProvider with ChangeNotifier {
       fileKey = fileKey.substring(7);
 
       final result = await Amplify.Storage.getUrl(key: fileKey);
-      // NOTE: This code is only for demonstration
-      // Your debug console may truncate the printed url string
-      // log('Got URL: ${result.url}');
+
       return result.url;
-    } on StorageException catch (e) {
-      // log('Error getting download URL: $e');
+    } on StorageException {
       return 'https://whetstonefire.org/wp-content/uploads/2020/06/image-not-available.jpg';
     }
   }
@@ -178,7 +165,6 @@ class UsersProvider with ChangeNotifier {
       return [];
     }
 
-    log(bottles.toString());
     return bottles;
   }
 
@@ -186,6 +172,12 @@ class UsersProvider with ChangeNotifier {
     dynamic stats = {};
     stats["scannedNumber"] = 0;
     Map<String, int> positionMap = {};
+    int maleCount = 0;
+    int femaleCount = 0;
+    List<int> maleAges = [];
+    List<int> femaleAges = [];
+    Map<int, int> dayOfWeekMap = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0};
+
     for (var bottle in bottlesList) {
       if (bottle.scans!.isNotEmpty) {
         for (var scan in bottle.scans!) {
@@ -193,14 +185,23 @@ class UsersProvider with ChangeNotifier {
             double.parse(scan.latitude!),
             double.parse(scan.longitude!),
           );
-          log(placemarks.toString());
           String? locality = placemarks[0].locality;
           positionMap.update(locality!, (value) => value + 1,
               ifAbsent: () => 1);
-        }
-        log(positionMap.toString());
-        var tempValue = 0;
 
+          if (scan.scannerSex == 'Male') {
+            maleCount++;
+            maleAges.add(int.parse(scan.scannerAge!));
+          } else {
+            femaleCount++;
+            femaleAges.add(int.parse(scan.scannerAge!));
+          }
+
+          var date = DateTime.parse(scan.day.toString());
+          dayOfWeekMap.update(date.weekday, (value) => value + 1);
+        }
+
+        var tempValue = 0;
         positionMap.forEach((k, v) {
           if (v > tempValue) {
             tempValue = v;
@@ -211,6 +212,79 @@ class UsersProvider with ChangeNotifier {
       }
     }
 
+    stats["male_count"] = maleCount;
+    stats["female_count"] = femaleCount;
+    stats["male_ages"] = maleAges;
+    stats["female_ages"] = femaleAges;
+    stats["weekday_map"] = dayOfWeekMap;
+
     return stats;
+  }
+
+  num getScannedTotal(dynamic adminProducts) {
+    num totalScanned = 0;
+    for (var product in adminProducts) {
+      totalScanned += product['scanned'];
+    }
+
+    return totalScanned;
+  }
+
+  num getUnscannedTotal(dynamic adminProducts) {
+    num totalUnscanned = 0;
+    for (var product in adminProducts) {
+      totalUnscanned += product['unscanned'];
+    }
+
+    return totalUnscanned;
+  }
+
+  String getMostPopularLocality(dynamic adminProducts) {
+    String mostPopular = '';
+    Map<String, int> positionMap = {};
+    for (var product in adminProducts) {
+      positionMap.update(product['locality'], (value) => value + 1,
+          ifAbsent: () => 1);
+    }
+    var tempValue = 0;
+    positionMap.forEach((k, v) {
+      if (v > tempValue) {
+        tempValue = v;
+        mostPopular = k;
+      }
+    });
+    return mostPopular;
+  }
+
+  num getMaleTotalCount(dynamic adminProducts) {
+    num maleCount = 0;
+    for (var product in adminProducts) {
+      maleCount += product['male_count'];
+    }
+    return maleCount;
+  }
+
+  List<int> getMaleAges(dynamic adminProducts) {
+    List<int> maleAges = [];
+    for (var product in adminProducts) {
+      maleAges.addAll(product['male_ages']);
+    }
+    return maleAges;
+  }
+
+  num getFemaleTotalCount(dynamic adminProducts) {
+    num femaleCount = 0;
+    for (var product in adminProducts) {
+      femaleCount += product['female_count'];
+    }
+    return femaleCount;
+  }
+
+  List<int> getFemaleAges(dynamic adminProducts) {
+    List<int> femaleAges = [];
+    for (var product in adminProducts) {
+      femaleAges.addAll(product['female_ages']);
+    }
+    return femaleAges;
   }
 }

@@ -1,9 +1,4 @@
-import 'dart:developer';
-
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:nfdrink/models/AdminUsers.dart';
 import 'package:nfdrink/pages/admin/all_products_info.dart';
 import 'package:nfdrink/pages/register.dart';
 import 'package:nfdrink/pages/user/home_page.dart';
@@ -94,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                       } else {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => HomePage(),
+                            builder: (context) => const HomePage(),
                           ),
                         );
                       }

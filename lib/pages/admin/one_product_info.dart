@@ -72,16 +72,22 @@ class OneProductInfo extends StatelessWidget {
                 ),
               ),
               const Category(title: "Distribución por sexo"),
-              const ComparationOfTwoByTwo(),
+              SexDistrWidget(
+                femaleAvg: productData["female_ages"],
+                femaleQtty: productData["female_count"],
+                maleAvg: productData["male_ages"],
+                maleQtty: productData["male_count"],
+              ),
               const Category(title: "Distribución por día de la semana"),
-              const WeekDayComparation(
-                  monday: "5",
-                  tuesday: "5",
-                  wednesday: "20",
-                  thursday: "20",
-                  friday: "220",
-                  saturday: "250",
-                  sunday: "30")
+              WeekDayComparation(
+                monday: productData['weekday_map'][1].toString(),
+                tuesday: productData['weekday_map'][2].toString(),
+                wednesday: productData['weekday_map'][3].toString(),
+                thursday: productData['weekday_map'][4].toString(),
+                friday: productData['weekday_map'][5].toString(),
+                saturday: productData['weekday_map'][6].toString(),
+                sunday: productData['weekday_map'][7].toString(),
+              )
             ],
           ),
         ),

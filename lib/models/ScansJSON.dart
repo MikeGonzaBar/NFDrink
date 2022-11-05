@@ -26,35 +26,47 @@ import 'package:flutter/foundation.dart';
 /** This is an auto generated class representing the ScansJSON type in your schema. */
 @immutable
 class ScansJSON {
-  final String? _scanner;
-  final TemporalDateTime? _day;
-  final String? _latitude;
+  final String? _scannerName;
+  final String? _scannerAge;
+  final String? _scannerSex;
   final String? _longitude;
+  final String? _latitude;
+  final TemporalDateTime? _day;
 
-  String? get scanner {
-    return _scanner;
+  String? get scannerName {
+    return _scannerName;
   }
   
-  TemporalDateTime? get day {
-    return _day;
+  String? get scannerAge {
+    return _scannerAge;
   }
   
-  String? get latitude {
-    return _latitude;
+  String? get scannerSex {
+    return _scannerSex;
   }
   
   String? get longitude {
     return _longitude;
   }
   
-  const ScansJSON._internal({scanner, day, latitude, longitude}): _scanner = scanner, _day = day, _latitude = latitude, _longitude = longitude;
+  String? get latitude {
+    return _latitude;
+  }
   
-  factory ScansJSON({String? scanner, TemporalDateTime? day, String? latitude, String? longitude}) {
+  TemporalDateTime? get day {
+    return _day;
+  }
+  
+  const ScansJSON._internal({scannerName, scannerAge, scannerSex, longitude, latitude, day}): _scannerName = scannerName, _scannerAge = scannerAge, _scannerSex = scannerSex, _longitude = longitude, _latitude = latitude, _day = day;
+  
+  factory ScansJSON({String? scannerName, String? scannerAge, String? scannerSex, String? longitude, String? latitude, TemporalDateTime? day}) {
     return ScansJSON._internal(
-      scanner: scanner,
-      day: day,
+      scannerName: scannerName,
+      scannerAge: scannerAge,
+      scannerSex: scannerSex,
+      longitude: longitude,
       latitude: latitude,
-      longitude: longitude);
+      day: day);
   }
   
   bool equals(Object other) {
@@ -65,10 +77,12 @@ class ScansJSON {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is ScansJSON &&
-      _scanner == other._scanner &&
-      _day == other._day &&
+      _scannerName == other._scannerName &&
+      _scannerAge == other._scannerAge &&
+      _scannerSex == other._scannerSex &&
+      _longitude == other._longitude &&
       _latitude == other._latitude &&
-      _longitude == other._longitude;
+      _day == other._day;
   }
   
   @override
@@ -79,35 +93,41 @@ class ScansJSON {
     var buffer = new StringBuffer();
     
     buffer.write("ScansJSON {");
-    buffer.write("scanner=" + "$_scanner" + ", ");
-    buffer.write("day=" + (_day != null ? _day!.format() : "null") + ", ");
+    buffer.write("scannerName=" + "$_scannerName" + ", ");
+    buffer.write("scannerAge=" + "$_scannerAge" + ", ");
+    buffer.write("scannerSex=" + "$_scannerSex" + ", ");
+    buffer.write("longitude=" + "$_longitude" + ", ");
     buffer.write("latitude=" + "$_latitude" + ", ");
-    buffer.write("longitude=" + "$_longitude");
+    buffer.write("day=" + (_day != null ? _day!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  ScansJSON copyWith({String? scanner, TemporalDateTime? day, String? latitude, String? longitude}) {
+  ScansJSON copyWith({String? scannerName, String? scannerAge, String? scannerSex, String? longitude, String? latitude, TemporalDateTime? day}) {
     return ScansJSON._internal(
-      scanner: scanner ?? this.scanner,
-      day: day ?? this.day,
+      scannerName: scannerName ?? this.scannerName,
+      scannerAge: scannerAge ?? this.scannerAge,
+      scannerSex: scannerSex ?? this.scannerSex,
+      longitude: longitude ?? this.longitude,
       latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude);
+      day: day ?? this.day);
   }
   
   ScansJSON.fromJson(Map<String, dynamic> json)  
-    : _scanner = json['scanner'],
-      _day = json['day'] != null ? TemporalDateTime.fromString(json['day']) : null,
+    : _scannerName = json['scannerName'],
+      _scannerAge = json['scannerAge'],
+      _scannerSex = json['scannerSex'],
+      _longitude = json['longitude'],
       _latitude = json['latitude'],
-      _longitude = json['longitude'];
+      _day = json['day'] != null ? TemporalDateTime.fromString(json['day']) : null;
   
   Map<String, dynamic> toJson() => {
-    'scanner': _scanner, 'day': _day?.format(), 'latitude': _latitude, 'longitude': _longitude
+    'scannerName': _scannerName, 'scannerAge': _scannerAge, 'scannerSex': _scannerSex, 'longitude': _longitude, 'latitude': _latitude, 'day': _day?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'scanner': _scanner, 'day': _day, 'latitude': _latitude, 'longitude': _longitude
+    'scannerName': _scannerName, 'scannerAge': _scannerAge, 'scannerSex': _scannerSex, 'longitude': _longitude, 'latitude': _latitude, 'day': _day
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -115,15 +135,27 @@ class ScansJSON {
     modelSchemaDefinition.pluralName = "ScansJSONS";
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'scanner',
+      fieldName: 'scannerName',
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'day',
+      fieldName: 'scannerAge',
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
+      fieldName: 'scannerSex',
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
+      fieldName: 'longitude',
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
@@ -133,9 +165,9 @@ class ScansJSON {
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'longitude',
+      fieldName: 'day',
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
     ));
   });
 }
