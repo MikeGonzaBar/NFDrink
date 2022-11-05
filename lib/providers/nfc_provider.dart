@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../pages/user/scan_good_result.dart';
-
 class NfcProvider with ChangeNotifier {
   // Variables
   bool isReadingNfc = false;
@@ -14,7 +12,7 @@ class NfcProvider with ChangeNotifier {
   String nfcData = "";
 
   // Methods
-  Future<void> scanNfc(BuildContext context) async {
+  Future<String> scanNfc() async {
     // Update screen text
     isReadingNfc = true;
     nfcReadStatusText = "Scanning...\nHold your phone near the NFDrink tag";
@@ -25,26 +23,18 @@ class NfcProvider with ChangeNotifier {
         permission == LocationPermission.deniedForever) {
       permission = await Geolocator.requestPermission();
     }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    // print(position);
 
     // Scan NFC hardware
     nfcData = await _getNfcData();
 
-    if (nfcData.contains("NFDrinkID:")) {
+    if (nfcData.contains("nfdrinkid:")) {
       resetNfcReadingState();
-      // Show result screen
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const ScanGoodResultPage()));
+      // Return bottle ID
+      return nfcData.split("nfdrinkid:")[1];
     } else {
-      // Update screen text
       resetNfcReadingState();
-      nfcReadStatusText =
-          "Oops! We couldn't scan that tag\nPlease tap to try again";
+      return "error";
     }
-    notifyListeners();
   }
 
   Future<String> _getNfcData() async {
@@ -56,22 +46,22 @@ class NfcProvider with ChangeNotifier {
 
       // Start scanning
       // Timeout only works on Android
+
       var tag = await FlutterNfcKit.poll(
         timeout: const Duration(hours: 1),
         androidPlatformSound: true,
       );
 
       // Print tag data
-      log(getPrettyJSONString(tag));
+      // log(getPrettyJSONString(tag));
 
       // Read NDEF records if available
+
       if (tag.ndefAvailable == true) {
         // Print decoded NDEF records
         for (var record in await FlutterNfcKit.readNDEFRecords(cached: false)) {
-          // log(record);
-          log(record.toString().split("text=")[1]);
+          // log(record.toString().split("text=")[1]);
           scannedText = record.toString().split("text=")[1];
-          // setState(() {});
         }
 
         // Print Raw NDEF records (data in hex string)
@@ -79,6 +69,9 @@ class NfcProvider with ChangeNotifier {
         //     in await FlutterNfcKit.readNDEFRawRecords(cached: false)) {
         //   log(jsonEncode(record).toString());
         // }
+      } else {
+        // Tag didn't have NFDrink bottle id
+        scannedText = "error";
       }
     } catch (e) {
       scannedText = "error";

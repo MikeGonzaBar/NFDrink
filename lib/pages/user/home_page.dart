@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:nfdrink/pages/login.dart';
 import 'package:nfdrink/pages/user/scan_bad_result.dart';
+import 'package:nfdrink/pages/user/scan_good_result.dart';
+import 'package:nfdrink/providers/bottles_provider.dart';
 import 'package:nfdrink/providers/nfc_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +47,6 @@ class _HomePageState extends State<HomePage> {
               color: Color(0xff494949),
               borderRadius: BorderRadius.all(Radius.circular(12))),
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
               Expanded(
@@ -64,37 +67,27 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 flex: 10,
                 child: GestureDetector(
-                  onTap: () {
-                    context.read<NfcProvider>().scanNfc(context);
+                  onTap: () async {
+                    String bottleId =
+                        await context.read<NfcProvider>().scanNfc();
+                    setState(() {});
+                    if (bottleId != "error") {
+                      dynamic bottleData = await context
+                          .read<BottlesProvider>()
+                          .getBottleById(bottleId);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ScanGoodResultPage(
+                                bottleData: bottleData,
+                              )));
+                    } else {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ScanBadResultPage()));
+                    }
                   },
                   child: Image.asset(
                     "assets/imgs/nfdrink_logo_circle.png",
                     width: MediaQuery.of(context).size.width * .8,
                   ),
-                ),
-              ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     Navigator.of(context).push(
-              //       MaterialPageRoute(
-              //         builder: (context) => const ScanGoodResultPage(),
-              //       ),
-              //     );
-              //   },
-              //   child: const Text(
-              //     "Temp: go to GOOD scan result page",
-              //   ),
-              // ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const ScanBadResultPage(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  "Temp: go to BAD scan result page",
                 ),
               ),
             ],
@@ -108,7 +101,7 @@ class _HomePageState extends State<HomePage> {
     try {
       await AmplifyAuthCognito().signOut();
     } on AuthException catch (e) {
-      log(e.message);
+      log(e.toString());
     }
   }
 }

@@ -31,7 +31,7 @@ class UsersProvider with ChangeNotifier {
 
       return true;
     } on AuthException catch (e) {
-      safePrint(e.message);
+      safePrint(e.toString());
       return false;
     }
   }
@@ -43,14 +43,15 @@ class UsersProvider with ChangeNotifier {
 
       return true;
     } on AuthException catch (e) {
-      safePrint(e.message);
+      safePrint(e.toString());
       return false;
     }
   }
 
   Future<bool> signIn(usr, pwd) async {
     try {
-      final result = await Amplify.Auth.signIn(username: usr, password: pwd);
+      final result =
+          await Amplify.Auth.signIn(username: usr.trim(), password: pwd.trim());
 
       var isSignedIn = result.isSignedIn;
 
@@ -161,7 +162,7 @@ class UsersProvider with ChangeNotifier {
         where: Bottles.PRODUCTS_ID.eq(id));
 
     if (bottles.isEmpty) {
-      log("No bottles of_product: $id");
+      log("No bottles of product: $id");
       return [];
     }
 

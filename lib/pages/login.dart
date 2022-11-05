@@ -13,10 +13,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final userTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final userTextController = TextEditingController();
-    final passwordTextController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Log in to NFDrink'),

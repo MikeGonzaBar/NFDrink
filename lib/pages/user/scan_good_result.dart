@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:nfdrink/providers/nfc_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class ScanGoodResultPage extends StatelessWidget {
-  const ScanGoodResultPage({super.key});
+  ScanGoodResultPage({super.key, required this.bottleData});
+
+  dynamic bottleData;
+
+  late var bottleInfo = bottleData[0];
+
+  late var productInfo = bottleData[1];
+
+  late var productImageUrl = bottleData[2];
+
+  late var localities = bottleData[3];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Información de tu NFDrink'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
+      body: SingleChildScrollView(
         child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+          margin: const EdgeInsets.all(12),
           decoration: const BoxDecoration(
               color: Color(0xff494949),
               borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -33,26 +42,103 @@ class ScanGoodResultPage extends StatelessWidget {
                   ),
                 ),
               ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text(
+                      '${productInfo.product_name}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '${productInfo.net_content} ml',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Text(
+                      'Año:',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '${bottleInfo.year}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  )
+                ],
+              ),
+              Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Text(
+                      'Lote:',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '${bottleInfo.lote}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  )
+                ],
+              ),
               Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  context.watch<NfcProvider>().nfcData,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                  ),
+                padding: const EdgeInsets.all(20.0),
+                child: Image.network(
+                  productImageUrl,
+                  height: 150,
                 ),
               ),
-              Expanded(
-                flex: 1,
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Divider(),
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 91, 91, 91),
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                margin: const EdgeInsets.all(12),
                 child: Column(
-                  children: const [
-                    Padding(
+                  children: [
+                    const Padding(
                       padding: EdgeInsets.only(top: 20),
                       child: Text(
-                        'Tequila José Cuervo Tradicional Cristalino',
+                        'Historial de escaneos:',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -61,110 +147,21 @@ class ScanGoodResultPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(
-                      '700ml',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: bottleInfo.scans.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                            leading: Text(DateFormat('yyyy-MM-dd\nHH:MM')
+                                .format(DateTime.parse(
+                                    bottleInfo.scans[index].day.toString()))
+                                .toString()),
+                            title: Text(bottleInfo.scans[index].scannerName),
+                            trailing: Text(localities[index]));
+                      },
                     ),
                   ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Text(
-                        'Año:',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      '2021',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Text(
-                        'Lote:',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      '123456',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Text(
-                        'Fecha de último escaneo:',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      '18 oct 2022',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Image.network(
-                    "https://cdn.shopify.com/s/files/1/0405/5990/2880/products/TEQUILA_JOSE_CUERVO_TRADICIONAL_CRISTALINO_750_ml_Venta_de_licores_mayoreo_bar_a_domicilio_con_entrega_en_casa_comprar_Botellas_con_descuento_Shopping_compras_desde_casa_352x.png?v=1629755996",
-                    height: 150,
-                  ),
                 ),
               ),
             ],
