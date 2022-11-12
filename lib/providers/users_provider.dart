@@ -107,6 +107,7 @@ class UsersProvider with ChangeNotifier {
       for (Products product in products) {
         dynamic productObject = {
           'product_name': product.product_name,
+          'product_key': product.id,
           'content': product.net_content,
           'image_link': product.image_s3_key,
         };
