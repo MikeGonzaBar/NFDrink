@@ -6,6 +6,7 @@ import 'package:nfdrink/pages/login.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nfdrink/providers/bottles_provider.dart';
 import 'package:nfdrink/providers/nfc_provider.dart';
+import 'package:nfdrink/providers/products_provider.dart';
 import 'package:nfdrink/providers/users_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,8 @@ void main() => runApp(MultiProvider(
         ChangeNotifierProvider(create: (context) => NfcProvider()),
         ChangeNotifierProvider(create: (context) => UsersProvider()),
         ChangeNotifierProvider(create: (context) => BottlesProvider()),
+        ChangeNotifierProvider(create: (context) => BottlesProvider()),
+        ChangeNotifierProvider(create: (context) => ProductsProvider()),
       ],
       child: const MyApp(),
     ));

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nfdrink/pages/admin/end_of_scroll_item.dart';
 import 'package:nfdrink/pages/admin/items/product_selection_item.dart';
 import 'package:nfdrink/pages/admin/widgets/category_widget.dart';
@@ -20,6 +21,11 @@ class AllProductsInfoPage extends StatefulWidget {
 }
 
 class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
+  dynamic adminFilteredData;
+  List<dynamic> productList = [];
+  final dateStartController = TextEditingController();
+  final dateEndController = TextEditingController();
+  final productController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,14 +63,80 @@ class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
                       color: Colors.white),
                 ),
               ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: dateStartController,
+                      decoration: const InputDecoration(
+                          suffixIcon: Icon(Icons.calendar_today),
+                          labelText: "Start Date"),
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime.now());
+
+                        if (pickedDate != null) {
+                          dateStartController.text =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
+                        } else {}
+                        _filterData(widget.adminData, dateStartController.text,
+                            dateEndController.text);
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: dateEndController,
+                      decoration: const InputDecoration(
+                          suffixIcon: Icon(Icons.calendar_today),
+                          labelText: "End Date"),
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime.now());
+
+                        if (pickedDate != null) {
+                          dateEndController.text =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
+                        } else {}
+                        _filterData(widget.adminData, dateStartController.text,
+                            dateEndController.text);
+                      },
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        dateEndController.text = '';
+                        dateStartController.text = '';
+                        productController.text = '';
+                        adminFilteredData = null;
+                        setState(() {});
+                        _resetData(widget.adminData);
+                      },
+                      icon: const Icon(Icons.replay_outlined))
+                ],
+              ),
               const Category(title: "Estadísticas (Todos tus productos)"),
               ComparationOfTwo(
                 firstColumn: "Escaneadas",
-                firstData:
-                    _getScannedTotal(widget.adminData["products"]).toString(),
+                firstData: _getScannedTotal(
+                        (adminFilteredData ?? widget.adminData)['products'])
+                    .toString(),
                 secondColumn: "Sin escanear",
-                secondData:
-                    _getUnscannedTotal(widget.adminData["products"]).toString(),
+                secondData: _getUnscannedTotal(
+                        (adminFilteredData ?? widget.adminData)["products"])
+                    .toString(),
               ),
               const Category(title: "Ubicación mas popular"),
               Container(
@@ -77,7 +149,8 @@ class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
                   padding: const EdgeInsets.only(
                       left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
                   child: Text(
-                    _getMostPopularLocality(widget.adminData["products"]),
+                    _getMostPopularLocality(
+                        (adminFilteredData ?? widget.adminData)["products"]),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 18,
@@ -88,12 +161,16 @@ class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
               ),
               const Category(title: "Distribución por sexo"),
               SexDistrWidget(
-                femaleAvg: _getFemaleAges(widget.adminData["products"]),
-                femaleQtty:
-                    _getFemaleTotalCount(widget.adminData["products"]).toInt(),
-                maleAvg: _getMaleAges(widget.adminData["products"]),
-                maleQtty:
-                    _getMaleTotalCount(widget.adminData["products"]).toInt(),
+                femaleAvg: _getFemaleAges(
+                    (adminFilteredData ?? widget.adminData)["products"]),
+                femaleQtty: _getFemaleTotalCount(
+                        (adminFilteredData ?? widget.adminData)["products"])
+                    .toInt(),
+                maleAvg: _getMaleAges(
+                    (adminFilteredData ?? widget.adminData)["products"]),
+                maleQtty: _getMaleTotalCount(
+                        (adminFilteredData ?? widget.adminData)["products"])
+                    .toInt(),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 24.0),
@@ -104,15 +181,52 @@ class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
                   color: const Color(0xffC5C5C5),
                 ),
               ),
-              const Category(title: "En circulación (todos tus products):"),
+              const Category(title: "En circulación (todos tus productos):"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    flex: 90,
+                    child: TextField(
+                      controller: productController,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            _searchForProduct(
+                                productController.text,
+                                dateStartController.text,
+                                dateEndController.text);
+                          },
+                          icon: const Icon(Icons.search),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              if (productList.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(left: 16.0, bottom: 8.0),
+                  child: Text(
+                      'Ingresa el nombre del producto deseado, si no lo encontramos te mostraremos todos los disponibles'),
+                ),
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: widget.adminData["products"].length + 1,
+                itemCount: (productList.isEmpty
+                        ? widget.adminData['products'].length
+                        : productList.length) +
+                    1,
                 itemBuilder: (BuildContext context, int index) {
-                  if (index != widget.adminData["products"].length) {
+                  if (index !=
+                      (productList.isEmpty
+                          ? widget.adminData['products'].length
+                          : productList.length)) {
                     return ProductSelectionItem(
-                      productData: widget.adminData["products"][index],
+                      productData: (productList.isEmpty
+                          ? widget.adminData['products']
+                          : productList)[index],
                     );
                   } else {
                     // If index is last, add ending dot
@@ -161,5 +275,33 @@ class _AllProductsInfoPageState extends State<AllProductsInfoPage> {
 
   List<int> _getFemaleAges(dynamic adminProducts) {
     return context.read<UsersProvider>().getFemaleAges(adminProducts);
+  }
+
+  void _searchForProduct(String product, String start, String end) {
+    List<dynamic> newProductList = [];
+
+    for (var productData in widget.adminData['products']) {
+      if (productData['product_name'].contains(product)) {
+        newProductList.add(productData);
+      }
+    }
+
+    productList = newProductList;
+    setState(() {});
+  }
+
+  Future<void> _filterData(adminData, String start, String end) async {
+    adminFilteredData = {};
+    adminFilteredData['products'] = await context
+        .read<UsersProvider>()
+        .getFilteredProductsByOwner(adminData, start, end);
+
+    setState(() {});
+  }
+
+  void _resetData(adminData) {
+    adminFilteredData = adminData;
+
+    setState(() {});
   }
 }
