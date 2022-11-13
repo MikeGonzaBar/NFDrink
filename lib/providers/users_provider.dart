@@ -153,7 +153,6 @@ class UsersProvider with ChangeNotifier {
       for (var product in adminData['products']) {
         dynamic productFilteredData =
             await getFilteredData(product, start, end);
-        log(productFilteredData.toString());
 
         newProductList.add(productFilteredData);
       }

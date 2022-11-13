@@ -57,9 +57,6 @@ class BottlesProvider with ChangeNotifier {
 
           await Amplify.DataStore.save(updatedObject);
 
-          log('Added scan. Updated Bottle object:');
-          log(getPrettyJSONString(updatedObject));
-
           for (var scan in updatedObject.scans!) {
             List<Placemark> placemarks = await placemarkFromCoordinates(
               double.parse(scan.latitude!),
@@ -72,7 +69,6 @@ class BottlesProvider with ChangeNotifier {
           log(e.toString());
         }
 
-        log(localities.toString());
         return [bottles.first, products.first, imageUrl, localities];
       }
     } catch (e) {
