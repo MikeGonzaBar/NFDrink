@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
@@ -68,13 +66,16 @@ class _HomePageState extends State<HomePage> {
                 flex: 10,
                 child: GestureDetector(
                   onTap: () async {
+
                     String bottleId =
                         await context.read<NfcProvider>().scanNfc();
+                    if (!mounted) return;
                     setState(() {});
                     if (bottleId != "error") {
                       dynamic bottleData = await context
                           .read<BottlesProvider>()
                           .getBottleById(bottleId);
+                    if (!mounted) return;
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ScanGoodResultPage(
                                 bottleData: bottleData,
