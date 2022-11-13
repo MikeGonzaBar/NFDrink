@@ -28,9 +28,6 @@ class ProductsProvider with ChangeNotifier {
   }
 
   dynamic getFilteredData(dynamic productData, String start, String end) async {
-    log(productData['product_key'].toString());
-    log(start);
-    log(end);
     final bottles = await Amplify.DataStore.query(Bottles.classType,
         where: Bottles.PRODUCTS_ID.eq(productData['product_key']));
 
@@ -42,11 +39,10 @@ class ProductsProvider with ChangeNotifier {
     dynamic newData = await popScansByDate(bottles, start, end);
     dynamic filteredScans = newData['new_scans'];
     dynamic newStats = await getScannedStats(filteredScans);
-    log(newStats.toString());
+
     int scannedNumber = newData["scannedNumber"];
     int unscannedNumber = bottles.length - scannedNumber;
-    log(scannedNumber.toString());
-    log(unscannedNumber.toString());
+
     dynamic filteredData = {
       'product_name': productData['product_name'],
       'product_key': productData['product_key'],
@@ -70,17 +66,12 @@ class ProductsProvider with ChangeNotifier {
     dynamic newData = {};
     newData['scannedNumber'] = 0;
     List<dynamic> newScans = [];
-    List<String> dateStartMap = start.split('/');
-
-    List<String> dateEndMap = end.split('/');
 
     DateTime dateStart =
         start == '' ? DateTime(1950) : DateTime.parse(start.toString());
-    log(dateStart.toString());
+
     DateTime dateEnd =
         end == '' ? DateTime.now() : DateTime.parse(end.toString());
-    log(dateEnd.toString());
-    // List<String> dateEnd = end.split('/');
 
     for (var bottle in bottlesList) {
       bool bottleIsInDate = false;
@@ -89,7 +80,6 @@ class ProductsProvider with ChangeNotifier {
           var date = scan.day;
           DateTime dateScan = DateTime.parse(date.toString());
 
-          log(dateScan.toString());
           if (dateStart.isBefore(dateScan) && dateEnd.isAfter(dateScan)) {
             bottleIsInDate = true;
             newScans.add(scan);
@@ -97,13 +87,11 @@ class ProductsProvider with ChangeNotifier {
         }
       }
 
-      log(bottleIsInDate.toString());
-      log(bottle.toString());
       if (bottleIsInDate) {
         newData['scannedNumber']++;
       }
     }
-    log(newScans.toString());
+
     newData['new_scans'] = newScans;
     return newData;
   }
